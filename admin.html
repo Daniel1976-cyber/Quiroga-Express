@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercy Market - Panel Administrador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0B3D4C 0%, #2d6a4f 100%);
+            color: #fff;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,0,0,0.7);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #0B3D4C;
+            border-bottom-color: #0B3D4C;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .btn-agregar {
+            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-agregar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #0B3D4C;
+            color: #fff;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #0B3D4C;
+            box-shadow: 0 0 0 3px rgba(11,61,76,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
+            color: #fff;
+            padding: 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+        }
+
+        .btn-cancel {
+            background: #e5e7eb;
+            color: #333;
+            padding: 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn-cancel:hover {
+            background: #d1d5db;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #047857;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0B3D4C;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0B3D4C;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0B3D4C 0%, #2d6a4f 100%);
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #0B3D4C;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .login-box input {
+            margin-bottom: 1rem;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+        }
+
+        .img-preview {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.7rem;
+            }
+
+            .acciones {
+                flex-direction: column;
+            }
+
+            .btn-edit, .btn-delete {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h2>🔐 Panel Administrador</h2>
+            <input type="password" id="passwordInput" placeholder="Ingresa la contraseña" />
+            <button onclick="verificarPassword()">Ingresar</button>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                Usa la contraseña asignada para acceder
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Screen -->
+    <div id="adminScreen" style="display: none;">
+        <header>
+            <h1>🛍️ Mercy Market - Admin</h1>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </header>
+
+        <div class="container">
+            <div class="alert" id="alert"></div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="cambiarTab('dashboard')">📊 Dashboard</button>
+                <button class="tab-btn" onclick="cambiarTab('productos')">📦 Productos</button>
+                <button class="tab-btn" onclick="cambiarTab('formulario')">➕ Agregar Producto</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProductos">0</div>
+                        <div class="stat-label">Total de Productos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="productosDisponibles">0</div>
+                        <div class="stat-label">Productos Disponibles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="productosAgotados">0</div>
+                        <div class="stat-label">Productos Agotados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategorias">0</div>
+                        <div class="stat-label">Categorías</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Tab -->
+            <div id="productos" class="tab-content">
+                <button class="btn-agregar" onclick="cambiarTab('formulario')">
+                    <i class="fas fa-plus"></i> Agregar Nuevo Producto
+                </button>
+                <table id="productosTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Disponible</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productosTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulario Tab -->
+            <div id="formulario" class="tab-content">
+                <div class="form-container">
+                    <h2 style="margin-bottom: 1.5rem; color: #0B3D4C;">
+                        <span id="formTitle">Agregar Nuevo Producto</span>
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="nombre">Nombre del Producto</label>
+                        <input type="text" id="nombre" placeholder="Ej: Laptop ABC Pro" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria">
+                            <option value="">Selecciona una categoría</option>
+                            <option>ELECTRÓNICA Y TECNOLOGÍA</option>
+                            <option>CUIDADO PERSONAL Y BELLEZA</option>
+                            <option>ROPA Y CALZADO</option>
+                            <option>HOGAR Y LIMPIEZA</option>
+                            <option>AUTOMÓVIL Y HERRAMIENTAS</option>
+                            <option>REGALOS FIESTA Y VARIOS</option>
+                            <option>SALUD Y FARMACIA BÁSICA</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subcategoria">Subcategoría</label>
+                        <input type="text" id="subcategoria" placeholder="Ej: Computación" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precio">Precio (CUP)</label>
+                        <input type="number" id="precio" placeholder="1000" step="0.01" min="0" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="disponible">
+                            <input type="checkbox" id="disponible" checked style="width: auto; margin-right: 0.5rem;" />
+                            Disponible
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagen">URL de Imagen</label>
+                        <input type="text" id="imagen" placeholder="https://ejemplo.com/imagen.jpg" />
+                        <img id="imagenPreview" class="img-preview" style="display: none;" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion">Descripción (opcional)</label>
+                        <textarea id="descripcion" placeholder="Describa el producto..."></textarea>
+                    </div>
+
+                    <button class="btn-submit" onclick="guardarProducto()" id="btnGuardar">Guardar Producto</button>
+                    <button class="btn-cancel" onclick="limpiarFormulario(); cambiarTab('productos')">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="cerrarModal()">&times;</button>
+            <div class="modal-header">Editar Producto</div>
+            
+            <div class="form-group">
+                <label for="editNombre">Nombre</label>
+                <input type="text" id="editNombre" />
+            </div>
+
+            <div class="form-group">
+                <label for="editCategoria">Categoría</label>
+                <select id="editCategoria">
+                    <option>ELECTRÓNICA Y TECNOLOGÍA</option>
+                    <option>CUIDADO PERSONAL Y BELLEZA</option>
+                    <option>ROPA Y CALZADO</option>
+                    <option>HOGAR Y LIMPIEZA</option>
+                    <option>AUTOMÓVIL Y HERRAMIENTAS</option>
+                    <option>REGALOS FIESTA Y VARIOS</option>
+                    <option>SALUD Y FARMACIA BÁSICA</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editPrecio">Precio</label>
+                <input type="number" id="editPrecio" step="0.01" min="0" />
+            </div>
+
+            <div class="form-group">
+                <label for="editDisponible">
+                    <input type="checkbox" id="editDisponible" style="width: auto; margin-right: 0.5rem;" />
+                    Disponible
+                </label>
+            </div>
+
+            <button class="btn-submit" onclick="guardarEdicion()">Guardar Cambios</button>
+            <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-Kpq9sNvQ3x1cW_rFKX8p08dLvmU3nJnkak';
+        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producción
+
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let isAuthenticated = false;
+        let productos = [];
+        let productoEditando = null;
+
+        // Verificación de contraseña
+        function verificarPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === ADMIN_PASSWORD) {
+                isAuthenticated = true;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminScreen').style.display = 'block';
+                cargarProductos();
+            } else {
+                mostrarAlerta('Contraseña incorrecta', 'error');
+            }
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminScreen').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+            limpiarFormulario();
+        }
+
+        // Cambiar tabs
+        function cambiarTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Cargar productos
+        async function cargarProductos() {
+            try {
+                const { data, error } = await _supabase.from('productos').select('*');
+                if (error) throw error;
+
+                productos = data || [];
+                actualizarDashboard();
+                renderizarProductos();
+            } catch (err) {
+                mostrarAlerta('Error al cargar productos: ' + err.message, 'error');
+            }
+        }
+
+        function actualizarDashboard() {
+            document.getElementById('totalProductos').textContent = productos.length;
+            document.getElementById('productosDisponibles').textContent = productos.filter(p => p.disponible).length;
+            document.getElementById('productosAgotados').textContent = productos.filter(p => !p.disponible).length;
+            const categorias = new Set(productos.map(p => p.categoria));
+            document.getElementById('totalCategorias').textContent = categorias.size;
+        }
+
+        function renderizarProductos() {
+            const tbody = document.getElementById('productosTableBody');
+            tbody.innerHTML = '';
+
+            productos.forEach(prod => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${prod.id}</td>
+                    <td>${prod.nombre}</td>
+                    <td>${prod.categoria}</td>
+                    <td>${prod.precio.toFixed(2)} CUP</td>
+                    <td>${prod.disponible ? '✅ Sí' : '❌ No'}</td>
+                    <td>
+                        <div class="acciones">
+                            <button class="btn-edit" onclick="editarProducto(${prod.id})">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn-delete" onclick="confirmarEliminar(${prod.id})">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Guardar producto
+        async function guardarProducto() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const subcategoria = document.getElementById('subcategoria').value;
+            const precio = parseFloat(document.getElementById('precio').value);
+            const disponible = document.getElementById('disponible').checked;
+            const img = document.getElementById('imagen').value || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(nombre);
+            const descripcion = document.getElementById('descripcion').value;
+
+            if (!nombre || !categoria || !precio) {
+                mostrarAlerta('Por favor completa los campos obligatorios', 'error');
+                return;
+            }
+
+            try {
+                const { data, error } = await _supabase
+                    .from('productos')
+                    .insert([{
+                        nombre,
+                        categoria,
+                        subcategoria: subcategoria || 'General',
+                        precio,
+                        disponible,
+                        img,
+                        descripcion
+                    }]);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto agregado correctamente', 'success');
+                limpiarFormulario();
+                cargarProductos();
+                cambiarTab('productos');
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
+            }
+        }
+
+        function editarProducto(id) {
+            productoEditando = productos.find(p => p.id === id);
+            if (!productoEditando) return;
+
+            document.getElementById('editNombre').value = productoEditando.nombre;
+            document.getElementById('editCategoria').value = productoEditando.categoria;
+            document.getElementById('editPrecio').value = productoEditando.precio;
+            document.getElementById('editDisponible').checked = productoEditando.disponible;
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        async function guardarEdicion() {
+            if (!productoEditando) return;
+
+            const nombre = document.getElementById('editNombre').value.trim();
+            const categoria = document.getElementById('editCategoria').value;
+            const precio = parseFloat(document.getElementById('editPrecio').value);
+            const disponible = document.getElementById('editDisponible').checked;
+
+            try {
+                const { error } = await _supabase
+                    .from('productos')
+                    .update({ nombre, categoria, precio, disponible })
+                    .eq('id', productoEditando.id);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto actualizado correctamente', 'success');
+                cerrarModal();
+                cargarProductos();
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
+            }
+        }
+
+        function confirmarEliminar(id) {
+            if (confirm('¿Seguro que deseas eliminar este producto?')) {
+                eliminarProducto(id);
+            }
+        }
+
+        async function eliminarProducto(id) {
+            try {
+                const { error } = await _supabase
+                    .from('productos')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto eliminado correctamente', 'success');
+                cargarProductos();
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
+            }
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('subcategoria').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('disponible').checked = true;
+            document.getElementById('imagen').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('imagenPreview').style.display = 'none';
+            document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
+        }
+
+        function cerrarModal() {
+            document.getElementById('editModal').classList.remove('active');
+            productoEditando = null;
+        }
+
+        function mostrarAlerta(mensaje, tipo) {
+            const alert = document.getElementById('alert');
+            alert.textContent = mensaje;
+            alert.className = 'alert show alert-' + tipo;
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Preview de imagen
+        document.getElementById('imagen')?.addEventListener('change', function() {
+            const preview = document.getElementById('imagenPreview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Enter para login
+        document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificarPassword();
+        });
+    </script>
+</body>
+</html>
