@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mercy Market · Tu tienda de confianza</title>
-    <meta name="description" content="Mercy Market – Calidad y cariño en cada detalle. Electrónica, belleza, ropa, hogar y más.">
+    <meta name="description"
+        content="Mercy Market – Calidad y cariño en cada detalle. Electrónica, belleza, ropa, hogar y más.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -52,7 +55,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
         }
 
         header h1 {
@@ -112,16 +115,16 @@
         .tarjeta {
             background: var(--color-white);
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+            transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s;
         }
 
         .tarjeta:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 36px rgba(0,0,0,0.13);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.13);
         }
 
         .tarjeta img {
@@ -130,7 +133,7 @@
             object-fit: cover;
             background-color: #e8e8e8;
             display: block;
-            transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .tarjeta:hover img {
@@ -162,7 +165,7 @@
         }
 
         .disponible {
-            background: rgba(16,185,129,0.12);
+            background: rgba(16, 185, 129, 0.12);
             color: #047857;
             padding: .22rem .7rem;
             border-radius: 20px;
@@ -170,13 +173,13 @@
             font-weight: 600;
             letter-spacing: 0.4px;
             align-self: flex-start;
-            border: 1px solid rgba(16,185,129,0.3);
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .agotado {
-            background: rgba(239,68,68,0.1);
+            background: rgba(239, 68, 68, 0.1);
             color: #b91c1c;
-            border: 1px solid rgba(239,68,68,0.25);
+            border: 1px solid rgba(239, 68, 68, 0.25);
         }
 
         #carritoFlotante {
@@ -187,7 +190,7 @@
             color: #fff;
             padding: .9rem 1.6rem;
             border-radius: 50px;
-            box-shadow: 0 6px 24px rgba(11,61,76,0.35);
+            box-shadow: 0 6px 24px rgba(11, 61, 76, 0.35);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -200,7 +203,7 @@
 
         #carritoFlotante:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(11,61,76,0.4);
+            box-shadow: 0 10px 30px rgba(11, 61, 76, 0.4);
         }
 
         #modalFondo {
@@ -221,7 +224,7 @@
             padding: 2rem;
             max-height: 82vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         }
 
         #modal h3 {
@@ -312,11 +315,11 @@
             width: 90%;
             max-width: 400px;
             background: var(--color-white);
-            border: 1.5px solid rgba(26,61,43,0.2);
+            border: 1.5px solid rgba(26, 61, 43, 0.2);
             border-radius: 12px;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .box input,
@@ -386,7 +389,7 @@
 
         footer {
             background: var(--color-primary);
-            color: rgba(255,255,255,0.85);
+            color: rgba(255, 255, 255, 0.85);
             margin-top: 3rem;
             padding: 0;
         }
@@ -411,7 +414,7 @@
         .footer-brand p {
             font-size: 0.9rem;
             line-height: 1.7;
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
             margin-bottom: 1.2rem;
         }
 
@@ -424,11 +427,11 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             text-decoration: none;
             font-size: 0.85rem;
             transition: all 0.3s;
@@ -458,7 +461,7 @@
 
         .footer-col ul li a,
         .footer-col ul li span {
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.3s;
@@ -472,11 +475,11 @@
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
             text-align: center;
             padding: 1.2rem 2rem;
             font-size: 0.82rem;
-            color: rgba(255,255,255,0.45);
+            color: rgba(255, 255, 255, 0.45);
         }
 
         button.inline {
@@ -501,7 +504,7 @@
             font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
-            box-shadow: 0 4px 16px rgba(26,61,43,0.2);
+            box-shadow: 0 4px 16px rgba(26, 61, 43, 0.2);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -514,7 +517,7 @@
 
         #filtros {
             background: var(--color-white);
-            border-bottom: 1px solid rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
             backdrop-filter: blur(8px);
         }
 
@@ -528,7 +531,7 @@
             max-width: 480px;
             width: 100%;
             border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
         }
 
         .seccion-bienvenida p {
@@ -566,22 +569,30 @@
 
 
 <body>
-    <header id="mainHeader" style="position:fixed;top:0;left:0;width:100%;height:160px;z-index:1000;background:linear-gradient(135deg,#1a3d2b 0%,#2d6a4f 100%);display:flex;align-items:center;padding:0 2.5rem;gap:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
-        <img src="logofrank.jpg" alt="Logo Bazar El Romero" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(201,169,110,0.5);box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+    <header id="mainHeader"
+        style="position:fixed;top:0;left:0;width:100%;height:160px;z-index:1000;background:linear-gradient(135deg,#1a3d2b 0%,#2d6a4f 100%);display:flex;align-items:center;padding:0 2.5rem;gap:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
+        <img src="logofrank.jpg" alt="Logo Bazar El Romero"
+            style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(201,169,110,0.5);box-shadow:0 4px 16px rgba(0,0,0,0.25);">
         <div>
-            <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;letter-spacing:2px;color:#fff;">Mercy Market</h1>
-            <p style="margin:.3rem 0 0;font-size:.95rem;opacity:.8;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.85);">&#x201C;Lo que necesitas, m&aacute;s cerca de ti.&#x201D;</p>
+            <h1
+                style="margin:0;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;letter-spacing:2px;color:#fff;">
+                Mercy Market</h1>
+            <p
+                style="margin:.3rem 0 0;font-size:.95rem;opacity:.8;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.85);">
+                &#x201C;Lo que necesitas, m&aacute;s cerca de ti.&#x201D;</p>
             <div style="margin-top:.6rem;display:flex;gap:.4rem;">
                 <span style="display:inline-block;width:24px;height:2px;background:#c9a96e;border-radius:2px;"></span>
-                <span style="display:inline-block;width:12px;height:2px;background:rgba(201,169,110,0.5);border-radius:2px;"></span>
-                <span style="display:inline-block;width:6px;height:2px;background:rgba(201,169,110,0.3);border-radius:2px;"></span>
+                <span
+                    style="display:inline-block;width:12px;height:2px;background:rgba(201,169,110,0.5);border-radius:2px;"></span>
+                <span
+                    style="display:inline-block;width:6px;height:2px;background:rgba(201,169,110,0.3);border-radius:2px;"></span>
             </div>
         </div>
     </header>
 
 
-     <!-- MENÚ FIJO DE CATEGORÍAS -->
-     <div id="filtros" style="
+    <!-- MENÚ FIJO DE CATEGORÍAS -->
+    <div id="filtros" style="
    position: fixed;
    top: 160px; /* justo debajo del header */
    left: 0;
@@ -595,15 +606,15 @@
    gap: 0.5rem;
    padding: 0.7rem 1rem;
  ">
-         <button class="btn-filtro activo" onclick="filtrar('todos', event)">Todos</button>
-         <button class="btn-filtro" onclick="filtrar('ELECTRÓNICA Y TECNOLOGÍA', event)">Electrónica</button>
-         <button class="btn-filtro" onclick="filtrar('CUIDADO PERSONAL Y BELLEZA', event)">Belleza</button>
-         <button class="btn-filtro" onclick="filtrar('ROPA Y CALZADO', event)">Ropa y Calzado</button>
-         <button class="btn-filtro" onclick="filtrar('HOGAR Y LIMPIEZA', event)">Hogar</button>
-         <button class="btn-filtro" onclick="filtrar('AUTOMÓVIL Y HERRAMIENTAS', event)">Automóvil</button>
-         <button class="btn-filtro" onclick="filtrar('REGALOS FIESTA Y VARIOS', event)">Regalos</button>
-         <button class="btn-filtro" onclick="filtrar('SALUD Y FARMACIA BÁSICA', event)">Salud</button>
-     </div>
+        <button class="btn-filtro activo" onclick="filtrar('todos', event)">Todos</button>
+        <button class="btn-filtro" onclick="filtrar('ELECTRÓNICA Y TECNOLOGÍA', event)">Electrónica</button>
+        <button class="btn-filtro" onclick="filtrar('CUIDADO PERSONAL Y BELLEZA', event)">Belleza</button>
+        <button class="btn-filtro" onclick="filtrar('ROPA Y CALZADO', event)">Ropa y Calzado</button>
+        <button class="btn-filtro" onclick="filtrar('HOGAR Y LIMPIEZA', event)">Hogar</button>
+        <button class="btn-filtro" onclick="filtrar('AUTOMÓVIL Y HERRAMIENTAS', event)">Automóvil</button>
+        <button class="btn-filtro" onclick="filtrar('REGALOS FIESTA Y VARIOS', event)">Regalos</button>
+        <button class="btn-filtro" onclick="filtrar('SALUD Y FARMACIA BÁSICA', event)">Salud</button>
+    </div>
     <section id="productos"></section>
 
     <div id="carritoFlotante" onclick="mostrarCarrito()">
@@ -635,8 +646,10 @@
                 <h2>Mercy Market</h2>
                 <p>“Lo que necesitas, más cerca de ti.”</p>
                 <div class="footer-social">
-                    <a href="https://facebook.com/Bazar%20El%20Romero" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://wa.me/5352846257" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://facebook.com/Bazar%20El%20Romero" target="_blank" title="Facebook"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/5353838198" target="_blank" title="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
                     <a href="mailto:mercymarket@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
@@ -656,7 +669,8 @@
                 <h4>Contacto</h4>
                 <ul>
                     <li><a href="https://wa.me/5353838198"><i class="fas fa-phone"></i> +53 53838198</a></li>
-                    <li><a href="mailto:mercymarket@gmail.com"><i class="fas fa-envelope"></i> mercymarket@gmail.com</a></li>
+                    <li><a href="mailto:mercymarket@gmail.com"><i class="fas fa-envelope"></i> mercymarket@gmail.com</a>
+                    </li>
                     <li><span><i class="fas fa-map-marker-alt"></i> San Miguel 90 entre Col&oacute;n y Maceo</span></li>
                     <li><span><i class="fas fa-clock"></i> Lun&ndash;S&aacute;b: 8:30 AM &ndash; 4:00 PM</span></li>
                 </ul>
@@ -668,7 +682,7 @@
     <script>
         /* ----------  CONFIG / DATOS INICIALES  ---------- */
         let catalogo = [];
-        
+
         // Inicializar Supabase
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
@@ -681,9 +695,9 @@
                 const { data, error } = await _supabase
                     .from('productos')
                     .select('*');
-                
+
                 if (error) throw error;
-                
+
                 catalogo = data.map(p => {
                     p.subcategoria = p.subcategoria || "General";
                     return p;
@@ -1201,23 +1215,23 @@
 
             const subcategorias = subcategoriasMap[categoria] || [];
             const menu = document.getElementById('subcategoriasMenu');
-            
+
             if (subcategorias.length > 0) {
-            menu.innerHTML = `
+                menu.innerHTML = `
                 <button class="btn-filtro" onclick="filtrarCategoria('${categoria}', null)">${categoria}</button>
             `;
-                
+
                 subcategorias.forEach(subcat => {
                     menu.innerHTML += `
                         <button class="btn-filtro" onclick="filtrarCategoria('${categoria}', '${subcat}')">${subcat}</button>
                     `;
                 });
-                
+
                 // Añadir botón para cerrar
                 menu.innerHTML += `
                     <button class="btn-filtro" onclick="cerrarSubcategorias()" style="margin-left: 1rem;">✕ Cerrar</button>
                 `;
-                
+
                 menu.style.display = 'flex';
                 subcategoriaSeleccionada = null;
                 categoriaSeleccionada = categoria;
@@ -1225,7 +1239,7 @@
                 // Si no hay subcategorías, filtrar directamente por categoría
                 filtrarCategoria(categoria, null);
             }
-            
+
             if (ev && ev.target) ev.target.classList.add('activo');
         }
 
@@ -1257,30 +1271,30 @@
             // Filtrar productos
             let filtrados = catalogo;
             if (categoria !== 'todos') {
-                filtrados = filtrados.filter(x => 
+                filtrados = filtrados.filter(x =>
                     String(x.categoria || '').toLowerCase().trim() === String(categoria).toLowerCase().trim()
                 );
             }
-            
+
             if (subcategoria && subcategoria !== null) {
-                filtrados = filtrados.filter(x => 
+                filtrados = filtrados.filter(x =>
                     String(x.subcategoria || '').toLowerCase().trim() === String(subcategoria).toLowerCase().trim()
                 );
             }
-            
+
             // Actualizar menú de subcategorías si está abierto
             const menu = document.getElementById('subcategoriasMenu');
             if (menu.style.display === 'flex') {
                 // Actualizar estado activo en el menú
                 menu.querySelectorAll('.btn-filtro').forEach(b => {
                     b.classList.remove('activo');
-                    if ((!subcategoria && b.textContent === categoria) || 
+                    if ((!subcategoria && b.textContent === categoria) ||
                         (subcategoria && b.textContent === subcategoria)) {
                         b.classList.add('activo');
                     }
                 });
             }
-            
+
             renderizar(filtrados);
             subcategoriaSeleccionada = subcategoria;
             categoriaSeleccionada = categoria;
