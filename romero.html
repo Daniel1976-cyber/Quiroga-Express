@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercy Market · Tu tienda de confianza</title>
+    <meta name="description" content="Mercy Market – Calidad y cariño en cada detalle. Electrónica, belleza, ropa, hogar y más.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #0B3D4C;
+            --color-accent: #c9a96e;
+            --color-bg: #faf8f4;
+            --color-bg-warm: #f5f1e8;
+            --color-text: #2e2e2e;
+            --color-text-light: #6b7280;
+            --color-white: #ffffff;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Inter', 'Segoe UI', sans-serif;
+            --verde: #0B3D4C;
+            --crema: #f5f1e8;
+            --tierra: #c9a96e;
+            --hoja: #1a5f6e;
+            --texto: #2e2e2e
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+        }
+
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            padding-top: 230px;
+            padding-bottom: 4rem;
+            font-family: var(--font-sans);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #2d6a4f 100%);
+            color: #fff;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: .3rem;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: .85;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        #filtros {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: .5rem;
+            padding: 1rem
+        }
+
+        .btn-filtro {
+            background: transparent;
+            border: 1.5px solid var(--color-primary);
+            padding: .5rem 1.1rem;
+            border-radius: 30px;
+            color: var(--color-primary);
+            font-family: var(--font-sans);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .btn-filtro:hover {
+            background: var(--color-primary);
+            color: #fff;
+        }
+
+        .activo {
+            background: var(--color-primary);
+            color: #fff;
+        }
+
+        #productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem
+        }
+
+        .tarjeta {
+            background: var(--color-white);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.13);
+        }
+
+        .tarjeta img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            background-color: #e8e8e8;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+        }
+
+        .tarjeta:hover img {
+            transform: scale(1.04);
+        }
+
+        .info {
+            padding: 1.2rem 1.3rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .info h3 {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: .5rem;
+            line-height: 1.3;
+        }
+
+        .precio {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-top: auto;
+            letter-spacing: 0.3px;
+        }
+
+        .disponible {
+            background: rgba(16,185,129,0.12);
+            color: #047857;
+            padding: .22rem .7rem;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            align-self: flex-start;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .agotado {
+            background: rgba(239,68,68,0.1);
+            color: #b91c1c;
+            border: 1px solid rgba(239,68,68,0.25);
+        }
+
+        #carritoFlotante {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), #1a5f6e);
+            color: #fff;
+            padding: .9rem 1.6rem;
+            border-radius: 50px;
+            box-shadow: 0 6px 24px rgba(11,61,76,0.35);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            z-index: 998;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #carritoFlotante:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(11,61,76,0.4);
+        }
+
+        #modalFondo {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center
+        }
+
+        #modal {
+            background: var(--color-white);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            max-height: 82vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        #modal h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+
+        #listaCarrito {
+            margin-bottom: 1rem
+        }
+
+        .itemCarrito {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .5rem 0;
+            border-bottom: 1px solid var(--tierra)
+        }
+
+        .total {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-top: 1rem;
+            text-align: right;
+            font-family: var(--font-serif);
+        }
+
+        .botones {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem
+        }
+
+        .botones button {
+            flex: 1;
+            padding: .75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer
+        }
+
+        .btn-wsp {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #fff;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+        }
+
+        .btn-wsp:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: var(--color-text);
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        #loginScreen,
+        #adminScreen {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            overflow-y: auto;
+            /* Añadir scroll vertical */
+            display: block;
+            /* No usar flex para evitar centrar vertical */
+            padding: 2rem;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .box {
+            width: 90%;
+            max-width: 400px;
+            background: var(--color-white);
+            border: 1.5px solid rgba(26,61,43,0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .box input,
+        .box button {
+            width: 100%;
+            margin: .5rem 0;
+            padding: .7rem;
+            border-radius: 8px;
+            border: 1px solid var(--tierra)
+        }
+
+        .box button {
+            background: linear-gradient(135deg, var(--color-primary), #2d6a4f);
+            color: #fff;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .box button:hover {
+            background: linear-gradient(135deg, #0f2d1c, var(--color-primary));
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem
+        }
+
+        th,
+        td {
+            padding: .5rem;
+            border: 1px solid var(--tierra)
+        }
+
+        th {
+            background: var(--color-primary);
+            color: #fff;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        img.mini {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px
+        }
+
+        .centrado {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap
+        }
+
+        .small {
+            font-size: .8rem;
+            color: var(--tierra);
+            margin-top: .3rem
+        }
+
+        footer {
+            background: var(--color-primary);
+            color: rgba(255,255,255,0.85);
+            margin-top: 3rem;
+            padding: 0;
+        }
+
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        .footer-brand h2 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .footer-col ul li a,
+        .footer-col ul li span {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.12);
+            text-align: center;
+            padding: 1.2rem 2rem;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.45);
+        }
+
+        button.inline {
+            background: transparent;
+            border: 1px solid var(--hoja);
+            padding: .3rem .6rem;
+            border-radius: 6px;
+            cursor: pointer
+        }
+
+        /* Títulos de Categoría en el catálogo */
+        .cat-titulo {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #2d6a4f 100%);
+            color: #fff;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            margin-bottom: 0.3rem;
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(26,61,43,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cat-titulo i {
+            color: var(--color-accent);
+            font-size: 1rem;
+        }
+
+        #filtros {
+            background: var(--color-white);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .seccion-bienvenida {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--color-bg-warm);
+        }
+
+        .seccion-bienvenida img {
+            max-width: 480px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .seccion-bienvenida p {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-top: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<script>
+    // Añade sombra al header y al menú cuando el usuario hace scroll
+    window.addEventListener("scroll", () => {
+        const header = document.getElementById("mainHeader");
+        const filtros = document.getElementById("filtros");
+        if (window.scrollY > 10) {
+            header.style.boxShadow = "0 4px 8px rgba(0,0,0,0.25)";
+            filtros.style.boxShadow = "0 4px 8px rgba(0,0,0,0.15)";
+        } else {
+            header.style.boxShadow = "none";
+            filtros.style.boxShadow = "none";
+        }
+    });
+</script>
+
+
+
+<body>
+    <header id="mainHeader" style="position:fixed;top:0;left:0;width:100%;height:160px;z-index:1000;background:linear-gradient(135deg,#1a3d2b 0%,#2d6a4f 100%);display:flex;align-items:center;padding:0 2.5rem;gap:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
+        <img src="logofrank.jpg" alt="Logo Bazar El Romero" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(201,169,110,0.5);box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+        <div>
+            <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;letter-spacing:2px;color:#fff;">Mercy Market</h1>
+            <p style="margin:.3rem 0 0;font-size:.95rem;opacity:.8;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.85);">&#x201C;Lo que necesitas, m&aacute;s cerca de ti.&#x201D;</p>
+            <div style="margin-top:.6rem;display:flex;gap:.4rem;">
+                <span style="display:inline-block;width:24px;height:2px;background:#c9a96e;border-radius:2px;"></span>
+                <span style="display:inline-block;width:12px;height:2px;background:rgba(201,169,110,0.5);border-radius:2px;"></span>
+                <span style="display:inline-block;width:6px;height:2px;background:rgba(201,169,110,0.3);border-radius:2px;"></span>
+            </div>
+        </div>
+    </header>
+
+
+     <!-- MENÚ FIJO DE CATEGORÍAS -->
+     <div id="filtros" style="
+   position: fixed;
+   top: 160px; /* justo debajo del header */
+   left: 0;
+   width: 100%;
+   background: var(--crema);
+   border-bottom: 1px solid var(--tierra);
+   z-index: 999;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 0.5rem;
+   padding: 0.7rem 1rem;
+ ">
+         <button class="btn-filtro activo" onclick="filtrar('todos', event)">Todos</button>
+         <button class="btn-filtro" onclick="filtrar('ELECTRÓNICA Y TECNOLOGÍA', event)">Electrónica</button>
+         <button class="btn-filtro" onclick="filtrar('CUIDADO PERSONAL Y BELLEZA', event)">Belleza</button>
+         <button class="btn-filtro" onclick="filtrar('ROPA Y CALZADO', event)">Ropa y Calzado</button>
+         <button class="btn-filtro" onclick="filtrar('HOGAR Y LIMPIEZA', event)">Hogar</button>
+         <button class="btn-filtro" onclick="filtrar('AUTOMÓVIL Y HERRAMIENTAS', event)">Automóvil</button>
+         <button class="btn-filtro" onclick="filtrar('REGALOS FIESTA Y VARIOS', event)">Regalos</button>
+         <button class="btn-filtro" onclick="filtrar('SALUD Y FARMACIA BÁSICA', event)">Salud</button>
+     </div>
+    <section id="productos"></section>
+
+    <div id="carritoFlotante" onclick="mostrarCarrito()">
+        <span id="carritoIcon">🛒</span>
+        <span id="carritoCant">0</span>
+    </div>
+
+    <div id="modalFondo" onclick="cerrarCarrito(event)">
+        <div id="modal" onclick="event.stopPropagation()">
+            <h3>Tu pedido</h3>
+            <div id="listaCarrito"></div>
+            <div class="total" id="totalCarrito">0.00 CUP</div>
+            <div class="botones">
+                <button class="btn-wsp" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+                <button class="btn-cancel" onclick="cerrarCarrito()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Contenedor para cargar la interfaz de administración avanzada (cargar produstos.html) -->
+    <div id="adminIframe" style="display:none;padding:1rem">
+        <!-- iframe se inyectará aquí cuando se detecte ?admin en la URL -->
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <h2>Mercy Market</h2>
+                <p>Tu tienda de confianza. Electrónica, belleza, ropa, hogar y mucho más con calidad y cariño en cada detalle.</p>
+                <div class="footer-social">
+                    <a href="https://facebook.com/Bazar%20El%20Romero" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/5352846257" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="mailto:mercymarket@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Categor&iacute;as</h4>
+                <ul>
+                    <li><span><i class="fas fa-laptop"></i> Electrónica y Tecnología</span></li>
+                    <li><span><i class="fas fa-heart"></i> Cuidado Personal y Belleza</span></li>
+                    <li><span><i class="fas fa-tshirt"></i> Ropa y Calzado</span></li>
+                    <li><span><i class="fas fa-home"></i> Hogar y Limpieza</span></li>
+                    <li><span><i class="fas fa-car"></i> Automóvil y Herramientas</span></li>
+                    <li><span><i class="fas fa-gift"></i> Regalos Fiesta y Varios</span></li>
+                    <li><span><i class="fas fa-medkit"></i> Salud y Farmacia Básica</span></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="https://wa.me/5353838198"><i class="fas fa-phone"></i> +53 53838198</a></li>
+                    <li><a href="mailto:mercymarket@gmail.com"><i class="fas fa-envelope"></i> mercymarket@gmail.com</a></li>
+                    <li><span><i class="fas fa-map-marker-alt"></i> San Miguel 90 entre Col&oacute;n y Maceo</span></li>
+                    <li><span><i class="fas fa-clock"></i> Lun&ndash;S&aacute;b: 8:30 AM &ndash; 4:00 PM</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 Mercy Market &mdash; Todos los derechos reservados.</div>
+    </footer>
+
+    <script>
+        /* ----------  CONFIG / DATOS INICIALES  ---------- */
+        let catalogo = [];
+        const API_BASE = window.location.origin;
+
+        async function loadCatalogFromServer() {
+            try {
+                console.log('[CLIENT] Cargando productos desde:', API_BASE + '/api/products');
+                const res = await fetch(API_BASE + '/api/products');
+                if (!res.ok) throw new Error('No se pudo cargar el catálogo');
+                catalogo = await res.json();
+                console.log('[CLIENT] Catálogo cargado:', catalogo.length, 'productos');
+            } catch (e) {
+                console.error('[CLIENT] Error cargando catálogo:', e);
+                // Fallback a datos de ejemplo cuando no hay servidor
+                catalogo = [
+                    {
+                        id: 1,
+                        nombre: "Teléfono inteligente XYZ",
+                        precio: 2500,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Accesorios Celular",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Telefono+XYZ"
+                    },
+                    {
+                        id: 2,
+                        nombre: "Laptop ABC Pro",
+                        precio: 8500,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Computación",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Laptop+ABC+Pro"
+                    },
+                    {
+                        id: 3,
+                        nombre: "Auriculares Bluetooth",
+                        precio: 1200,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Audio y Sonido",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Auriculares+BT"
+                    },
+                    {
+                        id: 4,
+                        nombre: "Cable USB-C 2m",
+                        precio: 350,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Cables y Conectores",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Cable+USB-C"
+                    },
+                    {
+                        id: 5,
+                        nombre: "Cargador rápido 20W",
+                        precio: 450,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Cargadores",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Cargador+Rapido"
+                    },
+                    {
+                        id: 6,
+                        nombre: "Batería externa 10000mAh",
+                        precio: 1800,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Energía y Baterías",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Batería+Externa"
+                    },
+                    {
+                        id: 7,
+                        nombre: "Lámpara de escritorio LED",
+                        precio: 950,
+                        categoria: "ELECTRÓNICA Y TECNOLOGÍA",
+                        subcategoria: "Iluminación",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Lampara+LED"
+                    },
+                    {
+                        id: 8,
+                        nombre: "Crema facial hidratante",
+                        precio: 450,
+                        categoria: "CUIDADO PERSONAL Y BELLEZA",
+                        subcategoria: "Cuidado Facial y Corporal",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Crema+Facial"
+                    },
+                    {
+                        id: 9,
+                        nombre: "Shampoo reparador",
+                        precio: 380,
+                        categoria: "CUIDADO PERSONAL Y BELLEZA",
+                        subcategoria: "Cuidado Capilar",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Shampoo+Reparador"
+                    },
+                    {
+                        id: 10,
+                        nombre: "Jabón antibacterial",
+                        precio: 120,
+                        categoria: "CUIDADO PERSONAL Y BELLEZA",
+                        subcategoria: "Higiene Personal",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Jabon+Antibacterial"
+                    },
+                    {
+                        id: 11,
+                        nombre: "Maquinilla de afeitar",
+                        precio: 280,
+                        categoria: "CUIDADO PERSONAL Y BELLEZA",
+                        subcategoria: "Afeitado y Depilación",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Maquinilla+Afeitar"
+                    },
+                    {
+                        id: 12,
+                        nombre: "Paleta de sombras",
+                        precio: 650,
+                        categoria: "CUIDADO PERSONAL Y BELLEZA",
+                        subcategoria: "Maquillaje y Accesorios",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Paleta+Sombras"
+                    },
+                    {
+                        id: 13,
+                        nombre: "Camisa polo azul",
+                        precio: 650,
+                        categoria: "ROPA Y CALZADO",
+                        subcategoria: "Ropa de Hombre",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Camisa+Polo+Azul"
+                    },
+                    {
+                        id: 14,
+                        nombre: "Vestido floral verano",
+                        precio: 1200,
+                        categoria: "ROPA Y CALZADO",
+                        subcategoria: "Ropa de Mujer",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Vestido+Floral"
+                    },
+                    {
+                        id: 15,
+                        nombre: "Zapatillas deportivas",
+                        precio: 1500,
+                        categoria: "ROPA Y CALZADO",
+                        subcategoria: "Calzado",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Zapatillas+Deportivas"
+                    },
+                    {
+                        id: 16,
+                        nombre: "Cinturón de cuero",
+                        precio: 420,
+                        categoria: "ROPA Y CALZADO",
+                        subcategoria: "Accesorios de Vestir",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Cinturon+Cuero"
+                    },
+                    {
+                        id: 17,
+                        nombre: "Set de organizadores acrílicos",
+                        precio: 850,
+                        categoria: "HOGAR Y LIMPIEZA",
+                        subcategoria: "Organización y Almacenamiento",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Organizadores+Acrilicos"
+                    },
+                    {
+                        id: 18,
+                        nombre: "Limpiador multiusos",
+                        precio: 220,
+                        categoria: "HOGAR Y LIMPIEZA",
+                        subcategoria: "Limpieza del Hogar",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Limpiador+Multiusos"
+                    },
+                    {
+                        id: 19,
+                        nombre: "Juego de sartenes antiadherentes",
+                        precio: 1100,
+                        categoria: "HOGAR Y LIMPIEZA",
+                        subcategoria: "Cocina y Alimentos",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Juego+Sartenes"
+                    },
+                    {
+                        id: 20,
+                        nombre: "Ventilador de pie",
+                        precio: 1600,
+                        categoria: "HOGAR Y LIMPIEZA",
+                        subcategoria: "Climatización y Confort",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Ventilador+Pie"
+                    },
+                    {
+                        id: 21,
+                        nombre: "Fundas para asiento de auto",
+                        precio: 950,
+                        categoria: "AUTOMÓVIL Y HERRAMIENTAS",
+                        subcategoria: "Accesorios para Vehículo",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Fundas+Asiento"
+                    },
+                    {
+                        id: 22,
+                        nombre: "Juego de destornilladores",
+                        precio: 750,
+                        categoria: "AUTOMÓVIL Y HERRAMIENTAS",
+                        subcategoria: "Herramientas y Uso General",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Destornilladores"
+                    },
+                    {
+                        id: 23,
+                        nombre: "Ambientador para auto",
+                        precio: 180,
+                        categoria: "AUTOMÓVIL Y HERRAMIENTAS",
+                        subcategoria: "Decoración y Regalos",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Ambientador+Auto"
+                    },
+                    {
+                        id: 24,
+                        nombre: "Pelota de fútbol",
+                        precio: 450,
+                        categoria: "REGALOS FIESTA Y VARIOS",
+                        subcategoria: "Deportes y Aire Libre",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Pelota+Futbol"
+                    },
+                    {
+                        id: 25,
+                        nombre: "Linterna de campaña",
+                        precio: 650,
+                        categoria: "REGALOS FIESTA Y VARIOS",
+                        subcategoria: "Varios",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Linterna+Campa"
+                    },
+                    {
+                        id: 26,
+                        nombre: "Paracetamol 500mg",
+                        precio: 85,
+                        categoria: "SALUD Y FARMACIA BÁSICA",
+                        subcategoria: "Medicamentos de Venta Libre",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Paracetamol"
+                    },
+                    {
+                        id: 27,
+                        nombre: "Vitamina C 1000mg",
+                        precio: 320,
+                        categoria: "SALUD Y FARMACIA BÁSICA",
+                        subcategoria: "Suplementos",
+                        disponible: true,
+                        img: "https://via.placeholder.com/400x300?text=Vitamina+C"
+                    }
+                ];
+                console.log('[CLIENT] Usando catálogo de ejemplo:', catalogo.length, 'productos');
+            }
+        }
+
+        /* ----------  CARRITO  ---------- */
+        let carrito = [];
+        const carritoCant = document.getElementById('carritoCant');
+        const carritoIcon = document.getElementById('carritoIcon');
+
+        function addCarrito(id) {
+            const prod = catalogo.find(p => p.id === id);
+            if (!prod) { alert('Producto no encontrado'); return; }
+            if (!prod.disponible) { alert('Producto agotado'); return; }
+            const linea = carrito.find(l => l.id === id);
+            if (linea) {
+                linea.cant++;
+            } else {
+                carrito.push({ ...prod, cant: 1 });
+            }
+            actualizarCarritoUI();
+            mostrarCarrito();
+        }
+
+        function actualizarCarritoUI() {
+            const total = carrito.reduce((t, l) => t + l.cant, 0);
+            carritoCant.textContent = total;
+            carritoIcon.textContent = '🛒';
+        }
+
+        function mostrarCarrito() {
+            const lista = document.getElementById('listaCarrito');
+            const totalEl = document.getElementById('totalCarrito');
+            lista.innerHTML = '';
+            if (carrito.length === 0) {
+                lista.innerHTML = '<p style="color:#666">No hay productos en el carrito</p>';
+                totalEl.textContent = '0.00 CUP';
+            } else {
+                let suma = 0;
+                carrito.forEach(l => {
+                    const div = document.createElement('div');
+                    div.className = 'itemCarrito';
+                    div.innerHTML = `
+            <div>
+              <strong>${l.nombre}</strong><br>
+              <small>${l.cant} × ${Number(l.precio).toFixed(2)} CUP</small>
+            </div>
+            <div>
+              <button class="inline" onclick="modCant(${l.id}, -1)">−</button>
+              <span style="margin:0 .6rem">${l.cant}</span>
+              <button class="inline" onclick="modCant(${l.id}, 1)">+</button>
+            </div>
+          `;
+                    lista.appendChild(div);
+                    suma += l.cant * l.precio;
+                });
+                totalEl.textContent = suma.toFixed(2) + ' CUP';
+            }
+            document.getElementById('modalFondo').style.display = 'flex';
+        }
+
+        function modCant(id, cambio) {
+            const linea = carrito.find(l => l.id === id);
+            if (!linea) return;
+            linea.cant += cambio;
+            if (linea.cant <= 0) carrito = carrito.filter(l => l.id !== id);
+            actualizarCarritoUI();
+            mostrarCarrito();
+        }
+
+        function cerrarCarrito(e) {
+            if (!e || e.target.id === 'modalFondo') document.getElementById('modalFondo').style.display = 'none';
+        }
+
+        function enviarWhatsApp() {
+            if (carrito.length === 0) { alert('Carrito vacío'); return; }
+            const tlf = '5353838198'; /* número que pediste mantener */
+            let texto = 'Hola, quisiera hacer este pedido:%0A%0A';
+            let total = 0;
+            carrito.forEach(l => {
+                texto += `• ${l.nombre} (${l.cant}×${Number(l.precio).toFixed(2)} CUP)%0A`;
+                total += l.cant * l.precio;
+            });
+            texto += `%0A*Total: ${total.toFixed(2)} CUP*%0A%0A¿Está disponible?`;
+            const url = `https://wa.me/${tlf}?text=${encodeURIComponent(decodeURIComponent(texto))}`;
+            window.open(url, '_blank');
+        }
+
+        /* ----------  RENDER TIENDA  ---------- */
+        const cont = document.getElementById('productos');
+        function renderizar(lista = catalogo) {
+            cont.innerHTML = '';
+            if (!lista || lista.length === 0) {
+                cont.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--tierra); font-size: 1.2rem;">No se encontraron productos en esta categoría.</div>';
+                return;
+            }
+
+            // 1. Agrupar productos por categoría
+            const grupos = {};
+            lista.forEach(p => {
+                const cat = p.categoria || 'Sin Categoría';
+                if (!grupos[cat]) grupos[cat] = [];
+                grupos[cat].push(p);
+            });
+
+            // 2. Ordenar las categorías (nombres de los grupos) alfabéticamente
+            const categoriasOrdenadas = Object.keys(grupos).sort((a, b) => a.localeCompare(b));
+
+            // 3. Renderizar cada grupo
+            categoriasOrdenadas.forEach(nombreCat => {
+                // Título de la categoría
+                const titulo = document.createElement('h2');
+                titulo.className = 'cat-titulo';
+                titulo.innerHTML = `<i class="fas fa-tag"></i> ${nombreCat}`;
+                cont.appendChild(titulo);
+
+                // Productos dentro de esta categoría ordenados por nombre
+                const productosCat = grupos[nombreCat].sort((a, b) =>
+                    String(a.nombre || '').localeCompare(String(b.nombre || ''))
+                );
+
+                productosCat.forEach(p => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta';
+
+                    const imgSrc = p.img ? p.img : 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+
+                    tarjeta.innerHTML = `
+                <img src="${imgSrc}" alt="${p.nombre}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Imagen+No+Disponible';">
+                <div class="info">
+                  <h3>${p.nombre}</h3>
+                  <span class="${p.disponible ? 'disponible' : 'agotado'}">${p.disponible ? 'Disponible' : 'Agotado'}</span>
+                  <div class="precio">${Number(p.precio).toFixed(2)} CUP</div>
+                  <button onclick="addCarrito(${p.id})" style="margin-top:.75rem;padding:.5rem 1rem;border:none;border-radius:25px;background:linear-gradient(135deg,#1a3d2b,#2d6a4f);color:#fff;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(26,61,43,0.35)'" onmouseout="this.style.transform='';this.style.boxShadow=''"><i class='fas fa-cart-plus' style='margin-right:6px;'></i>Agregar</button>
+                </div>
+              `;
+                    cont.appendChild(tarjeta);
+                });
+            });
+        }
+
+        function filtrar(cat, ev) {
+            document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('activo'));
+            if (ev && ev.target) ev.target.classList.add('activo');
+
+            if (cat === 'todos') {
+                renderizar(catalogo);
+            } else {
+                const filtrados = catalogo.filter(x =>
+                    String(x.categoria || '').toLowerCase().trim() === String(cat).toLowerCase().trim()
+                );
+                renderizar(filtrados);
+            }
+        }
+
+        // render inicial: cargar catálogo desde servidor (fallback localStorage)
+        loadCatalogFromServer().then(() => renderizar());
+
+        // si venimos a admin, cargar la interfaz de administración.
+        // Si se desea la antigua (localStorage) se puede añadir '?admin=legacy'
+        if (location.search.includes('admin')) {
+            // Si se solicita explicitly legacy, mostramos el administrador local
+            if (location.search.includes('admin=legacy')) {
+                document.getElementById('loginScreen').style.display = 'flex';
+            } else {
+                // Cargar la interfaz que creamos (admin.html) dentro de un iframe
+                const iframeContainer = document.getElementById('adminIframe');
+                iframeContainer.style.display = 'block';
+                iframeContainer.innerHTML = `<iframe src="/admin" style="width:100%;height:85vh;border:0;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12)"></iframe>`;
+                // ocultar pantallas locales
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminScreen').style.display = 'none';
+                // scroll to admin area
+                setTimeout(() => window.scrollTo({ top: 160, behavior: 'smooth' }), 200);
+            }
+        }
+        }
+        /* ---------- EXPORTAR CATÁLOGO ---------- */
+        function exportarCatalogo(formato = 'excel') {
+            if (!catalogo || catalogo.length === 0) {
+                alert('No hay productos para exportar');
+                return;
+            }
+
+            if (formato === 'json') {
+                const blob = new Blob([JSON.stringify(catalogo, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'catalogo_bazar.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            } else {
+                // Exportar a Excel
+                const datos = [['Categoría', 'Subcategoría', 'Nombre', 'Precio']];
+                catalogo.forEach(p => datos.push([p.categoria, p.subcategoria || '', p.nombre, p.precio]));
+                const hoja = XLSX.utils.aoa_to_sheet(datos);
+                const libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, 'Productos');
+                XLSX.writeFile(libro, 'catalogo_bazar.xlsx');
+            }
+
+            alert('Catálogo exportado correctamente');
+        }
+
+        // Funciones para manejar subcategorías
+        let subcategoriaSeleccionada = null;
+        let categoriaSeleccionada = null;
+
+        function abrirSubcategorias(categoria, ev) {
+            // Actualizar botones principales
+            document.querySelectorAll('.btn-filtro').forEach(b => {
+                b.classList.remove('activo');
+                if (b.textContent.trim().startsWith(categoria)) {
+                    b.classList.add('activo');
+                    b.textContent = categoria + ' ▼';
+                }
+            });
+
+            // Definir subcategorías por categoría
+            const subcategoriasMap = {
+                'ELECTRÓNICA Y TECNOLOGÍA': [
+                    'Audio y Sonido',
+                    'Cables y Conectores',
+                    'Cargadores',
+                    'Energía y Baterías',
+                    'Accesorios Celular',
+                    'Iluminación',
+                    'Computación'
+                ],
+                'CUIDADO PERSONAL Y BELLEZA': [
+                    'Cuidado Capilar',
+                    'Cuidado Facial y Corporal',
+                    'Higiene Personal',
+                    'Afeitado y Depilación',
+                    'Maquillaje y Accesorios'
+                ],
+                'ROPA Y CALZADO': [
+                    'Ropa de Hombre',
+                    'Ropa de Mujer',
+                    'Calzado',
+                    'Accesorios de Vestir'
+                ],
+                'HOGAR Y LIMPIEZA': [
+                    'Organización y Almacenamiento',
+                    'Limpieza del Hogar',
+                    'Cocina y Alimentos',
+                    'Climatización y Confort'
+                ],
+                'AUTOMÓVIL Y HERRAMIENTAS': [
+                    'Accesorios para Vehículo',
+                    'Herramientas y Uso General',
+                    'Decoración y Regalos'
+                ],
+                'REGALOS FIESTA Y VARIOS': [
+                    'Deportes y Aire Libre',
+                    'Varios'
+                ],
+                'SALUD Y FARMACIA BÁSICA': [
+                    'Medicamentos de Venta Libre',
+                    'Suplementos'
+                ]
+            };
+
+            const subcategorias = subcategoriasMap[categoria] || [];
+            const menu = document.getElementById('subcategoriasMenu');
+            
+            if (subcategorias.length > 0) {
+            menu.innerHTML = `
+                <button class="btn-filtro" onclick="filtrarCategoria('${categoria}', null)">${categoria}</button>
+            `;
+                
+                subcategorias.forEach(subcat => {
+                    menu.innerHTML += `
+                        <button class="btn-filtro" onclick="filtrarCategoria('${categoria}', '${subcat}')">${subcat}</button>
+                    `;
+                });
+                
+                // Añadir botón para cerrar
+                menu.innerHTML += `
+                    <button class="btn-filtro" onclick="cerrarSubcategorias()" style="margin-left: 1rem;">✕ Cerrar</button>
+                `;
+                
+                menu.style.display = 'flex';
+                subcategoriaSeleccionada = null;
+                categoriaSeleccionada = categoria;
+            } else {
+                // Si no hay subcategorías, filtrar directamente por categoría
+                filtrarCategoria(categoria, null);
+            }
+            
+            if (ev && ev.target) ev.target.classList.add('activo');
+        }
+
+        function cerrarSubcategorias() {
+            document.getElementById('subcategoriasMenu').style.display = 'none';
+            // Restaurar texto de los botones
+            document.querySelectorAll('.btn-filtro').forEach(b => {
+                if (b.classList.contains('activo')) {
+                    const categoriaActual = b.textContent;
+                    b.textContent = categoriaActual;
+                }
+            });
+            subcategoriaSeleccionada = null;
+            categoriaSeleccionada = null;
+            renderizar(catalogo); // Mostrar todos los productos
+        }
+
+        function filtrarCategoria(categoria, subcategoria) {
+            // Actualizar botones principales
+            document.querySelectorAll('.btn-filtro').forEach(b => {
+                b.classList.remove('activo');
+                if (b.textContent.trim().startsWith(categoria)) {
+                    b.classList.add('activo');
+                    // Siempre mostrar solo el nombre de la categoría sin el indicador de desplegable
+                    b.textContent = categoria;
+                }
+            });
+
+            // Filtrar productos
+            let filtrados = catalogo;
+            if (categoria !== 'todos') {
+                filtrados = filtrados.filter(x => 
+                    String(x.categoria || '').toLowerCase().trim() === String(categoria).toLowerCase().trim()
+                );
+            }
+            
+            if (subcategoria && subcategoria !== null) {
+                filtrados = filtrados.filter(x => 
+                    String(x.subcategoria || '').toLowerCase().trim() === String(subcategoria).toLowerCase().trim()
+                );
+            }
+            
+            // Actualizar menú de subcategorías si está abierto
+            const menu = document.getElementById('subcategoriasMenu');
+            if (menu.style.display === 'flex') {
+                // Actualizar estado activo en el menú
+                menu.querySelectorAll('.btn-filtro').forEach(b => {
+                    b.classList.remove('activo');
+                    if ((!subcategoria && b.textContent === categoria) || 
+                        (subcategoria && b.textContent === subcategoria)) {
+                        b.classList.add('activo');
+                    }
+                });
+            }
+            
+            renderizar(filtrados);
+            subcategoriaSeleccionada = subcategoria;
+            categoriaSeleccionada = categoria;
+        }
+
+    </script>
+</body>
+
+</html>
