@@ -684,10 +684,10 @@
                 
                 if (error) throw error;
                 
-                catalogo = data.map(p => ({
-                    ...p,
-                    subcategoria: p.subcategoria || "General"
-                }));
+                catalogo = data.map(p => {
+                    p.subcategoria = p.subcategoria || "General";
+                    return p;
+                });
                 console.log('[CLIENT] Catálogo cargado:', catalogo.length, 'productos');
             } catch (e) {
                 console.error('[CLIENT] Error cargando catálogo de Supabase:', e);
