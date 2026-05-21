@@ -2,8 +2,7 @@
   "buildCommand": "echo 'Build complete'",
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/", "destination": "/romero.html" }
+    { "source": "/admin", "destination": "/admin.html" }
   ],
   "headers": [
     {
