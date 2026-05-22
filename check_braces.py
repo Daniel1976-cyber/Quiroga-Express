@@ -1,4 +1,4 @@
-with open('romero.html', 'r', encoding='utf-8') as f:
+with open('index.html', 'r', encoding='utf-8') as f:
     lines = f.readlines()
 
 stack = []
