@@ -1,7 +1,4 @@
 {
-  "versions": {
-    "node": "20.x"
-  },
   "buildCommand": null,
   "devCommand": null,
   "installCommand": null,
