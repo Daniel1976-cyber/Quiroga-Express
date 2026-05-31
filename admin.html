@@ -791,6 +791,8 @@
             document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
         }
 
+// Duplicate limpiarFormulario function removed
+
         function actualizarDashboard() {
             document.getElementById('totalProductos').textContent = productos.length;
             document.getElementById('productosDisponibles').textContent = productos.filter(p => p.disponible).length;
@@ -822,9 +824,8 @@
                         </div>
                     </td>
                 `;
-                tbody.appendChi// Duplicate guardarProducto function removed to avoid conflict.
-rr.message, 'error');
-            }
+                tbody.appendChild(tr);
+            });
         }
 
         function editarProducto(id) {
