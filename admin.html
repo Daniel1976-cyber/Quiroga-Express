@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-    <title>Mercy Market - Panel Administrador</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
+        <title>Mercy Market - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -27,7 +29,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         header h1 {
@@ -36,8 +38,8 @@
         }
 
         .btn-logout {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
             padding: 0.6rem 1.2rem;
             border-radius: 6px;
@@ -46,7 +48,7 @@
         }
 
         .btn-logout:hover {
-            background: rgba(255,0,0,0.7);
+            background: rgba(255, 0, 0, 0.7);
         }
 
         .container {
@@ -89,8 +91,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .btn-agregar {
@@ -107,14 +114,14 @@
 
         .btn-agregar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -136,7 +143,8 @@
             background: #f9f9f9;
         }
 
-        .btn-edit, .btn-delete {
+        .btn-edit,
+        .btn-delete {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 4px;
@@ -175,7 +183,9 @@
             color: #333;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -184,10 +194,12 @@
             font-size: 1rem;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: #0B3D4C;
-            box-shadow: 0 0 0 3px rgba(11,61,76,0.1);
+            box-shadow: 0 0 0 3px rgba(11, 61, 76, 0.1);
         }
 
         textarea {
@@ -199,7 +211,7 @@
             background: #fff;
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             max-width: 600px;
             margin: 0 auto;
         }
@@ -218,7 +230,7 @@
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
         }
 
         .btn-cancel {
@@ -273,7 +285,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -291,7 +303,7 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .modal-header {
@@ -323,7 +335,7 @@
             background: #fff;
             padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -351,7 +363,7 @@
             background: #fff;
             padding: 3rem;
             border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             width: 90%;
             max-width: 400px;
         }
@@ -381,7 +393,7 @@
 
         .login-box button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
+            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
         }
 
         .img-preview {
@@ -407,7 +419,8 @@
                 font-size: 0.9rem;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 0.7rem;
             }
 
@@ -415,7 +428,8 @@
                 flex-direction: column;
             }
 
-            .btn-edit, .btn-delete {
+            .btn-edit,
+            .btn-delete {
                 width: 100%;
                 margin-right: 0;
                 margin-bottom: 0.5rem;
@@ -423,6 +437,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
@@ -502,7 +517,7 @@
                     <h2 style="margin-bottom: 1.5rem; color: #0B3D4C;">
                         <span id="formTitle">Agregar Nuevo Producto</span>
                     </h2>
-                    
+
                     <div class="form-group">
                         <label for="nombre">Nombre del Producto</label>
                         <input type="text" id="nombre" placeholder="Ej: Laptop ABC Pro" />
@@ -562,7 +577,7 @@
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal()">&times;</button>
             <div class="modal-header">Editar Producto</div>
-            
+
             <div class="form-group">
                 <label for="editNombre">Nombre</label>
                 <input type="text" id="editNombre" />
@@ -603,7 +618,7 @@
         // In Vercel, configure these as environment variables and inject them into the page if using a build step.
         // For static hosting, replace the placeholders below with the actual values.
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-Kpq9sNvQ3x1cW_rFKX8p08dLvmU3nJnkak';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
         const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producción
 
         const { createClient } = supabase;
@@ -833,7 +848,7 @@
         }
 
         // Preview de imagen
-        document.getElementById('imagen')?.addEventListener('change', function() {
+        document.getElementById('imagen')?.addEventListener('change', function () {
             const preview = document.getElementById('imagenPreview');
             if (this.value) {
                 preview.src = this.value;
@@ -844,9 +859,10 @@
         });
 
         // Enter para login
-        document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
+        document.getElementById('passwordInput')?.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') verificarPassword();
         });
     </script>
 </body>
+
 </html>
