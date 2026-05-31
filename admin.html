@@ -635,7 +635,7 @@
         // For static hosting, replace the placeholders below with the actual values.
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
-        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producción
+        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producci��n
 
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -643,6 +643,8 @@
         let isAuthenticated = false;
         let productos = [];
         let productoEditando = null;
+        let uploadedImageUrl = '';
+        let editUploadedImageUrl = '';
 
         // Verificación de contraseña
         function verificarPassword() {
@@ -936,6 +938,71 @@
 
 
 
+// Edit image upload
+let editUploadedImageUrl = '';
+const editDropArea = document.getElementById('editDropArea');
+const editImageInput = document.getElementById('editImageInput');
+const editImagePreview = document.getElementById('editImagePreview');
+
+editDropArea.addEventListener('click', () => editImageInput.click());
+editDropArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    editDropArea.classList.add('hover');
+});
+editDropArea.addEventListener('dragleave', () => editDropArea.classList.remove('hover'));
+editDropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    editDropArea.classList.remove('hover');
+    const files = e.dataTransfer.files;
+    if (files && files[0]) handleEditFileUpload(files[0]);
+});
+editImageInput.addEventListener('change', e => {
+    if (e.target.files && e.target.files[0]) handleEditFileUpload(e.target.files[0]);
+});
+
+async function handleEditFileUpload(file) {
+    // Basic validation
+    if (!file.type.startsWith('image/')) {
+        mostrarAlerta('Solo se permiten archivos de imagen', 'error');
+        return;
+    }
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        mostrarAlerta('La imagen no debe superar los 5?MB', 'error');
+        return;
+    }
+    // Show a temporary preview
+    const reader = new FileReader();
+    reader.onload = e => {
+        editImagePreview.src = e.target.result;
+        editImagePreview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to Supabase Storage
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = fileName; // root of bucket
+    try {
+        const { data, error } = await _supabase.storage
+            .from('producto-imagenes')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        if (error) throw error;
+        const { publicURL, error: urlErr } = _supabase.storage
+            .from('producto-imagenes')
+            .getPublicUrl(filePath);
+        if (urlErr) throw urlErr;
+        editUploadedImageUrl = publicURL;
+        mostrarAlerta('Imagen subida correctamente', 'success');
+    } catch (err) {
+        console.error('Upload error:', err);
+        mostrarAlerta('Error al subir la imagen: ' + err.message, 'error');
+        editUploadedImageUrl = '';
+        editImagePreview.classList.add('hidden');
+    }
+}
         // Enter para login
         document.getElementById('passwordInput')?.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') verificarPassword();
@@ -944,3 +1011,5 @@
 </body>
 
 </html>
+
+
