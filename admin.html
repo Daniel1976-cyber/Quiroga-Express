@@ -391,6 +391,27 @@
             border-radius: 4px;
         }
 
+        .drop-area {
+            border: 2px dashed rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .drop-area:hover {
+            background: rgba(0,0,0,0.05);
+            border-color: #0B3D4C;
+        }
+
+        .drop-area i {
+            color: #0B3D4C;
+            margin-bottom: 0.5rem;
+        }
+
+        .img-preview.hidden { display: none; }
+
         .acciones {
             display: flex;
             gap: 0.5rem;
@@ -540,9 +561,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="imagen">URL de Imagen</label>
-                        <input type="text" id="imagen" placeholder="https://ejemplo.com/imagen.jpg" />
-                        <img id="imagenPreview" class="img-preview" style="display: none;" />
+                        <label>Imagen del Producto (arrastrar o click)</label>
+                        <div id="dropArea" class="drop-area">
+                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                            <p>Arrastra la imagen aquí o haz clic para seleccionar</p>
+                            <img id="imagePreview" class="img-preview hidden" alt="Vista previa" />
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*" style="display:none;" />
+                        <input type="hidden" id="imagen" />
                     </div>
 
                     <div class="form-group">
@@ -716,7 +742,7 @@
             const subcategoria = document.getElementById('subcategoria').value;
             const precio = parseFloat(document.getElementById('precio').value);
             const disponible = document.getElementById('disponible').checked;
-            const img = document.getElementById('imagen').value || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(nombre);
+            const img = uploadedImageUrl || document.getElementById('imagen').value || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(nombre);
             const descripcion = document.getElementById('descripcion').value;
 
             if (!nombre || !categoria || !precio) {
@@ -832,16 +858,93 @@
             }, 3000);
         }
 
-        // Preview de imagen
-        document.getElementById('imagen')?.addEventListener('change', function() {
-            const preview = document.getElementById('imagenPreview');
-            if (this.value) {
-                preview.src = this.value;
-                preview.style.display = 'block';
-            } else {
-                preview.style.display = 'none';
-            }
+        // Drag and drop para imagen
+        const dropArea = document.getElementById('dropArea');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        let uploadedImageUrl = '';
+
+        dropArea?.addEventListener('click', () => imageInput.click());
+
+        imageInput?.addEventListener('change', handleFileSelect);
+
+        dropArea?.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#0B3D4C';
+            dropArea.style.background = 'rgba(0,0,0,0.05)';
         });
+
+        dropArea?.addEventListener('dragleave', () => {
+            dropArea.style.borderColor = 'rgba(0,0,0,0.2)';
+            dropArea.style.background = '';
+        });
+
+        dropArea?.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = 'rgba(0,0,0,0.2)';
+            dropArea.style.background = '';
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        }
+
+        async function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                mostrarAlerta('Selecciona solo archivos de imagen', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+            
+            uploadedImageUrl = await uploadToSupabase(file);
+            if (uploadedImageUrl) {
+                document.getElementById('imagen').value = uploadedImageUrl;
+            }
+        }
+
+        async function uploadToSupabase(file) {
+            try {
+                const fileName = `productos/${Date.now()}_${file.name}`;
+                const { data, error } = await _supabase.storage
+                    .from('product-images')
+                    .upload(fileName, file);
+                
+                if (error) throw error;
+                
+                const { data: urlData } = _supabase.storage
+                    .from('product-images')
+                    .getPublicUrl(fileName);
+                
+                mostrarAlerta('Imagen cargada correctamente', 'success');
+                return urlData.publicUrl;
+            } catch (err) {
+                mostrarAlerta('Error al subir imagen: ' + err.message, 'error');
+                return null;
+            }
+        }
+
+        // Limpiar formulario
+        function limpiarFormulario() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('subcategoria').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('disponible').checked = true;
+            document.getElementById('imagen').value = '';
+            document.getElementById('descripcion').value = '';
+            imagePreview.classList.add('hidden');
+            document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
+            uploadedImageUrl = '';
+        }
 
         // Enter para login
         document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
