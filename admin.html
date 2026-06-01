@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-        <title>Mercy Market - Panel Administrador</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
+    <title>Mercy Market - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -29,7 +27,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         header h1 {
@@ -38,8 +36,8 @@
         }
 
         .btn-logout {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             color: #fff;
             padding: 0.6rem 1.2rem;
             border-radius: 6px;
@@ -48,7 +46,7 @@
         }
 
         .btn-logout:hover {
-            background: rgba(255, 0, 0, 0.7);
+            background: rgba(255,0,0,0.7);
         }
 
         .container {
@@ -91,13 +89,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .btn-agregar {
@@ -114,14 +107,14 @@
 
         .btn-agregar:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -143,8 +136,7 @@
             background: #f9f9f9;
         }
 
-        .btn-edit,
-        .btn-delete {
+        .btn-edit, .btn-delete {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 4px;
@@ -183,9 +175,7 @@
             color: #333;
         }
 
-        input,
-        textarea,
-        select {
+        input, textarea, select {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -194,12 +184,10 @@
             font-size: 1rem;
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: #0B3D4C;
-            box-shadow: 0 0 0 3px rgba(11, 61, 76, 0.1);
+            box-shadow: 0 0 0 3px rgba(11,61,76,0.1);
         }
 
         textarea {
@@ -211,7 +199,7 @@
             background: #fff;
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             max-width: 600px;
             margin: 0 auto;
         }
@@ -230,7 +218,7 @@
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
         }
 
         .btn-cancel {
@@ -285,7 +273,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -303,7 +291,7 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .modal-header {
@@ -335,7 +323,7 @@
             background: #fff;
             padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
         }
 
@@ -363,7 +351,7 @@
             background: #fff;
             padding: 3rem;
             border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 400px;
         }
@@ -393,27 +381,15 @@
 
         .login-box button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
+            box-shadow: 0 6px 12px rgba(11,61,76,0.3);
         }
 
-    .drop-area {
-        border: 2px dashed rgba(0,0,0,0.2);
-        border-radius: 8px;
-        padding: 1.5rem;
-        text-align: center;
-        cursor: pointer;
-        transition: background 0.3s, border-color 0.3s;
-    }
-    .drop-area:hover {
-        background: rgba(0,0,0,0.05);
-        border-color: #0B3D4C;
-    }
-    .drop-area i {
-        color: #0B3D4C;
-        margin-bottom: 0.5rem;
-    }
-    .img-preview.hidden { display: none; }
-    .img-preview { max-width: 150px; margin-top: 0.5rem; border-radius: 4px; }
+        .img-preview {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
 
         .acciones {
             display: flex;
@@ -431,8 +407,7 @@
                 font-size: 0.9rem;
             }
 
-            th,
-            td {
+            th, td {
                 padding: 0.7rem;
             }
 
@@ -440,8 +415,7 @@
                 flex-direction: column;
             }
 
-            .btn-edit,
-            .btn-delete {
+            .btn-edit, .btn-delete {
                 width: 100%;
                 margin-right: 0;
                 margin-bottom: 0.5rem;
@@ -449,7 +423,6 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
@@ -529,7 +502,7 @@
                     <h2 style="margin-bottom: 1.5rem; color: #0B3D4C;">
                         <span id="formTitle">Agregar Nuevo Producto</span>
                     </h2>
-
+                    
                     <div class="form-group">
                         <label for="nombre">Nombre del Producto</label>
                         <input type="text" id="nombre" placeholder="Ej: Laptop ABC Pro" />
@@ -567,13 +540,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Imagen del Producto (arrastrar o click)</label>
-                        <div id="dropArea" class="drop-area">
-                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
-                            <p>Arrastra la imagen aquí o haz clic para seleccionar</p>
-                            <img id="imagePreview" class="img-preview hidden" alt="Vista previa" />
-                        </div>
-                        <input type="file" id="imageInput" accept="image/*" style="display:none;" />
+                        <label for="imagen">URL de Imagen</label>
+                        <input type="text" id="imagen" placeholder="https://ejemplo.com/imagen.jpg" />
+                        <img id="imagenPreview" class="img-preview" style="display: none;" />
                     </div>
 
                     <div class="form-group">
@@ -593,7 +562,7 @@
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModal()">&times;</button>
             <div class="modal-header">Editar Producto</div>
-
+            
             <div class="form-group">
                 <label for="editNombre">Nombre</label>
                 <input type="text" id="editNombre" />
@@ -634,8 +603,8 @@
         // In Vercel, configure these as environment variables and inject them into the page if using a build step.
         // For static hosting, replace the placeholders below with the actual values.
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
-        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producci��n
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-Kpq9sNvQ3x1cW_rFKX8p08dLvmU3nJnkak';
+        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producción
 
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -643,664 +612,241 @@
         let isAuthenticated = false;
         let productos = [];
         let productoEditando = null;
-        let uploadedImageUrl = '';
-        let editUploadedImageUrl = '';
 
+        // Verificación de contraseña
         function verificarPassword() {
-            const password = document.getElementById('passwordInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
             if (password === ADMIN_PASSWORD) {
                 isAuthenticated = true;
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminScreen').style.display = 'block';
                 cargarProductos();
             } else {
-                mostrarAlerta('Contrase??a incorrecta', 'error');
+                mostrarAlerta('Contraseña incorrecta', 'error');
             }
-}
         }
 
         function logout() {
             isAuthenticated = false;
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminScreen').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+            limpiarFormulario();
+        }
+
+        // Cambiar tabs
+        function cambiarTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Cargar productos
+        async function cargarProductos() {
+            try {
+                const { data, error } = await _supabase.from('productos').select('*');
+                if (error) throw error;
+                productos = data || [];
+                actualizarDashboard();
+                renderizarProductos();
+            } catch (err) {
+                console.error('[ADMIN] Error loading products from Supabase:', err);
+                // Attempt direct Supabase REST API as fallback
+                try {
+                    const supabaseResponse = await fetch(`${SUPABASE_URL}/rest/v1/productos?select=*`, {
+                        headers: {
+                            apikey: SUPABASE_KEY,
+                            Authorization: `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (!supabaseResponse.ok) throw new Error(`HTTP ${supabaseResponse.status}`);
+                    const data = await supabaseResponse.json();
+                    productos = data;
+                    actualizarDashboard();
+                    renderizarProductos();
+                    mostrarAlerta('Cargados productos desde Supabase REST fallback', 'info');
+                } catch (fallbackErr) {
+                    console.error('[ADMIN] Fallback error loading products:', fallbackErr);
+                    mostrarAlerta('Error al cargar productos: ' + err.message, 'error');
+                }
             }
-                mostrarAlerta('Contrase�a incorrecta', 'error');
-            } else {
+        }
+
+        function actualizarDashboard() {
+            document.getElementById('totalProductos').textContent = productos.length;
+            document.getElementById('productosDisponibles').textContent = productos.filter(p => p.disponible).length;
+            document.getElementById('productosAgotados').textContent = productos.filter(p => !p.disponible).length;
+            const categorias = new Set(productos.map(p => p.categoria));
+            document.getElementById('totalCategorias').textContent = categorias.size;
+        }
+
+        function renderizarProductos() {
+            const tbody = document.getElementById('productosTableBody');
+            tbody.innerHTML = '';
+
+            productos.forEach(prod => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${prod.id}</td>
+                    <td>${prod.nombre}</td>
+                    <td>${prod.categoria}</td>
+                    <td>${prod.precio.toFixed(2)} CUP</td>
+                    <td>${prod.disponible ? '✅ Sí' : '❌ No'}</td>
+                    <td>
+                        <div class="acciones">
+                            <button class="btn-edit" onclick="editarProducto(${prod.id})">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn-delete" onclick="confirmarEliminar(${prod.id})">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Guardar producto
+        async function guardarProducto() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const subcategoria = document.getElementById('subcategoria').value;
+            const precio = parseFloat(document.getElementById('precio').value);
+            const disponible = document.getElementById('disponible').checked;
+            const img = document.getElementById('imagen').value || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(nombre);
+            const descripcion = document.getElementById('descripcion').value;
+
+            if (!nombre || !categoria || !precio) {
+                mostrarAlerta('Por favor completa los campos obligatorios', 'error');
+                return;
+            }
+
+            try {
+                const { data, error } = await _supabase
+                    .from('productos')
+                    .insert([{
+                        nombre,
+                        categoria,
+                        subcategoria: subcategoria || 'General',
+                        precio,
+                        disponible,
+                        img,
+                        descripcion
+                    }]);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto agregado correctamente', 'success');
+                limpiarFormulario();
                 cargarProductos();
-                document.getElementById('adminScreen').style.display = 'block';
-                document.getElementById('loginScreen').style.display = 'none';
-                isAuthenticated = true;
-            if (password === ADMIN_PASSWORD) {
-            const password = document.getElementById('passwordInput').value.trim();
-        function verificarPassword() {
-        function verificarPassword() {
-        // Verificación de contraseña
-
-        let productoEditando = null;
-        let productos = [];
-        let isAuthenticated = false;
-
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-        const { createClient } = supabase;
-
-        const ADMIN_PASSWORD = 'mercy123'; // CAMBIAR en producción
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
-        const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
-        // For static hosting, replace the placeholders below with the actual values.
-        // In Vercel, configure these as environment variables and inject them into the page if using a build step.
-        // NOTE: Ensure SUPABASE_URL and SUPABASE_KEY are set to the correct public anon credentials.
-    <script>
-
-    </div>
-        </div>
-            <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
-            <button class="btn-submit" onclick="guardarEdicion()">Guardar Cambios</button>
-
-            </div>
-                </label>
-                    Disponible
-                    <input type="checkbox" id="editDisponible" style="width: auto; margin-right: 0.5rem;" />
-                <label for="editDisponible">
-            <div class="form-group">
-
-            </div>
-                <input type="number" id="editPrecio" step="0.01" min="0" />
-                <label for="editPrecio">Precio</label>
-            <div class="form-group">
-
-            </div>
-                </select>
-                    <option>SALUD Y FARMACIA BÁSICA</option>
-                    <option>REGALOS FIESTA Y VARIOS</option>
-                    <option>AUTOMÓVIL Y HERRAMIENTAS</option>
-                    <option>HOGAR Y LIMPIEZA</option>
-                    <option>ROPA Y CALZADO</option>
-                    <option>CUIDADO PERSONAL Y BELLEZA</option>
-                    <option>ELECTRÓNICA Y TECNOLOGÍA</option>
-                <select id="editCategoria">
-                <label for="editCategoria">Categoría</label>
-            <div class="form-group">
-
-            </div>
-                <input type="text" id="editNombre" />
-                <label for="editNombre">Nombre</label>
-            <div class="form-group">
-
-            <div class="modal-header">Editar Producto</div>
-            <button class="modal-close" onclick="cerrarModal()">&times;</button>
-        <div class="modal-content">
-    <div id="editModal" class="modal">
-    <!-- Modal para Editar -->
-
-    </div>
-        </div>
-            </div>
-                </div>
-                    <button class="btn-cancel" onclick="limpiarFormulario(); cambiarTab('productos')">Cancelar</button>
-                    <button class="btn-submit" onclick="guardarProducto()" id="btnGuardar">Guardar Producto</button>
-
-                    </div>
-                        <textarea id="descripcion" placeholder="Describa el producto..."></textarea>
-                        <label for="descripcion">Descripción (opcional)</label>
-                    <div class="form-group">
-
-                    </div>
-                        <img id="imagenPreview" class="img-preview" style="display: none;" />
-                        <input type="text" id="imagen" placeholder="https://ejemplo.com/imagen.jpg" />
-                        <label for="imagen">URL de Imagen</label>
-                    <div class="form-group">
-
-                    </div>
-                        </label>
-                            Disponible
-                            <input type="checkbox" id="disponible" checked style="width: auto; margin-right: 0.5rem;" />
-                        <label for="disponible">
-                    <div class="form-group">
-
-                    </div>
-                        <input type="number" id="precio" placeholder="1000" step="0.01" min="0" />
-                        <label for="precio">Precio (CUP)</label>
-                    <div class="form-group">
-
-                    </div>
-                        <input type="text" id="subcategoria" placeholder="Ej: Computación" />
-                        <label for="subcategoria">Subcategoría</label>
-                    <div class="form-group">
-
-                    </div>
-                        </select>
-                            <option>SALUD Y FARMACIA BÁSICA</option>
-                            <option>REGALOS FIESTA Y VARIOS</option>
-                            <option>AUTOMÓVIL Y HERRAMIENTAS</option>
-                            <option>HOGAR Y LIMPIEZA</option>
-                            <option>ROPA Y CALZADO</option>
-                            <option>CUIDADO PERSONAL Y BELLEZA</option>
-                            <option>ELECTRÓNICA Y TECNOLOGÍA</option>
-                            <option value="">Selecciona una categoría</option>
-                        <select id="categoria">
-                        <label for="categoria">Categoría</label>
-                    <div class="form-group">
-
-                    </div>
-                        <input type="text" id="nombre" placeholder="Ej: Laptop ABC Pro" />
-                        <label for="nombre">Nombre del Producto</label>
-                    <div class="form-group">
-
-                    </h2>
-                        <span id="formTitle">Agregar Nuevo Producto</span>
-                    <h2 style="margin-bottom: 1.5rem; color: #0B3D4C;">
-                <div class="form-container">
-            <div id="formulario" class="tab-content">
-            <!-- Formulario Tab -->
-
-            </div>
-                </table>
-                    </tbody>
-                    <tbody id="productosTableBody">
-                    </thead>
-                        </tr>
-                            <th>Acciones</th>
-                            <th>Disponible</th>
-                            <th>Precio</th>
-                            <th>Categoría</th>
-                            <th>Nombre</th>
-                            <th>ID</th>
-                        <tr>
-                    <thead>
-                <table id="productosTable">
-                </button>
-                    <i class="fas fa-plus"></i> Agregar Nuevo Producto
-                <button class="btn-agregar" onclick="cambiarTab('formulario')">
-            <div id="productos" class="tab-content">
-            <!-- Productos Tab -->
-
-            </div>
-                </div>
-                    </div>
-                        <div class="stat-label">Categorías</div>
-                        <div class="stat-number" id="totalCategorias">0</div>
-                    <div class="stat-card">
-                    </div>
-                        <div class="stat-label">Productos Agotados</div>
-                        <div class="stat-number" id="productosAgotados">0</div>
-                    <div class="stat-card">
-                    </div>
-                        <div class="stat-label">Productos Disponibles</div>
-                        <div class="stat-number" id="productosDisponibles">0</div>
-                    <div class="stat-card">
-                    </div>
-                        <div class="stat-label">Total de Productos</div>
-                        <div class="stat-number" id="totalProductos">0</div>
-                    <div class="stat-card">
-                <div class="stats">
-            <div id="dashboard" class="tab-content active">
-            <!-- Dashboard Tab -->
-
-            </div>
-                <button class="tab-btn" onclick="cambiarTab('formulario')">➕ Agregar Producto</button>
-                <button class="tab-btn" onclick="cambiarTab('productos')">📦 Productos</button>
-                <button class="tab-btn active" onclick="cambiarTab('dashboard')">📊 Dashboard</button>
-            <div class="tabs">
-            <!-- Tabs -->
-
-            <div class="alert" id="alert"></div>
-        <div class="container">
-
-        </header>
-            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
-            <h1>🛍️ Mercy Market - Admin</h1>
-        <header>
-    <div id="adminScreen" style="display: none;">
-    <!-- Admin Screen -->
-
-    </div>
-        </div>
-            </p>
-                Usa la contraseña asignada para acceder
-            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
-            <button onclick="verificarPassword()">Ingresar</button>
-            <input type="password" id="passwordInput" placeholder="Ingresa la contraseña" />
-            <h2>🔐 Panel Administrador</h2>
-        <div class="login-box">
-    <div id="loginScreen" class="login-container">
-    <!-- Login Screen -->
-<body>
-
-</head>
-    </style>
-        }
+                cambiarTab('productos');
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
             }
-                margin-bottom: 0.5rem;
-                margin-right: 0;
-                width: 100%;
-            .btn-delete {
-            .btn-edit,
+        }
 
+        function editarProducto(id) {
+            productoEditando = productos.find(p => p.id === id);
+            if (!productoEditando) return;
+
+            document.getElementById('editNombre').value = productoEditando.nombre;
+            document.getElementById('editCategoria').value = productoEditando.categoria;
+            document.getElementById('editPrecio').value = productoEditando.precio;
+            document.getElementById('editDisponible').checked = productoEditando.disponible;
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        async function guardarEdicion() {
+            if (!productoEditando) return;
+
+            const nombre = document.getElementById('editNombre').value.trim();
+            const categoria = document.getElementById('editCategoria').value;
+            const precio = parseFloat(document.getElementById('editPrecio').value);
+            const disponible = document.getElementById('editDisponible').checked;
+
+            try {
+                const { error } = await _supabase
+                    .from('productos')
+                    .update({ nombre, categoria, precio, disponible })
+                    .eq('id', productoEditando.id);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto actualizado correctamente', 'success');
+                cerrarModal();
+                cargarProductos();
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
             }
-                flex-direction: column;
-            .acciones {
+        }
 
+        function confirmarEliminar(id) {
+            if (confirm('¿Seguro que deseas eliminar este producto?')) {
+                eliminarProducto(id);
             }
-                padding: 0.7rem;
-            td {
-            th,
+        }
 
+        async function eliminarProducto(id) {
+            try {
+                const { error } = await _supabase
+                    .from('productos')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                mostrarAlerta('Producto eliminado correctamente', 'success');
+                cargarProductos();
+            } catch (err) {
+                mostrarAlerta('Error: ' + err.message, 'error');
             }
-                font-size: 0.9rem;
-            table {
+        }
 
+        function limpiarFormulario() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('subcategoria').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('disponible').checked = true;
+            document.getElementById('imagen').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('imagenPreview').style.display = 'none';
+            document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
+        }
+
+        function cerrarModal() {
+            document.getElementById('editModal').classList.remove('active');
+            productoEditando = null;
+        }
+
+        function mostrarAlerta(mensaje, tipo) {
+            const alert = document.getElementById('alert');
+            alert.textContent = mensaje;
+            alert.className = 'alert show alert-' + tipo;
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Preview de imagen
+        document.getElementById('imagen')?.addEventListener('change', function() {
+            const preview = document.getElementById('imagenPreview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
             }
-                gap: 1rem;
-                flex-direction: column;
-            header {
-        @media (max-width: 768px) {
+        });
 
-        }
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            display: flex;
-        .acciones {
-
-        }
-            border-radius: 4px;
-            margin-top: 0.5rem;
-            max-height: 100px;
-            max-width: 100px;
-        .img-preview {
-
-        }
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
-            transform: translateY(-2px);
-        .login-box button:hover {
-
-        }
-            transition: all 0.3s;
-            cursor: pointer;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            color: #fff;
-            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
-            padding: 0.8rem;
-            width: 100%;
-        .login-box button {
-
-        }
-            margin-bottom: 1rem;
-        .login-box input {
-
-        }
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: #0B3D4C;
-            text-align: center;
-        .login-box h2 {
-
-        }
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 3rem;
-            background: #fff;
-        .login-box {
-
-        }
-            background: linear-gradient(135deg, #0B3D4C 0%, #2d6a4f 100%);
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-        .login-container {
-
-        }
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #666;
-        .stat-label {
-
-        }
-            color: #0B3D4C;
-            font-weight: 700;
-            font-size: 2rem;
-        .stat-number {
-
-        }
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 1.5rem;
-            background: #fff;
-        .stat-card {
-
-        }
-            margin-bottom: 2rem;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            display: grid;
-        .stats {
-
-        }
-            color: #666;
-            cursor: pointer;
-            font-size: 1.5rem;
-            border: none;
-            background: none;
-            right: 1rem;
-            top: 1rem;
-            position: absolute;
-        .modal-close {
-
-        }
-            color: #0B3D4C;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            font-size: 1.5rem;
-        .modal-header {
-
-        }
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow-y: auto;
-            max-height: 80vh;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 8px;
-            padding: 2rem;
-            background: #fff;
-        .modal-content {
-
-        }
-            display: flex;
-        .modal.active {
-
-        }
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.5);
-            height: 100%;
-            width: 100%;
-            left: 0;
-            top: 0;
-            position: fixed;
-            display: none;
-        .modal {
-
-        }
-            border: 1px solid #93c5fd;
-            color: #1e40af;
-            background: #dbeafe;
-        .alert-info {
-
-        }
-            border: 1px solid #fca5a5;
-            color: #dc2626;
-            background: #fee2e2;
-        .alert-error {
-
-        }
-            border: 1px solid #6ee7b7;
-            color: #047857;
-            background: #d1fae5;
-        .alert-success {
-
-        }
-            display: block;
-        .alert.show {
-
-        }
-            display: none;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-        .alert {
-
-        }
-            background: #d1d5db;
-        .btn-cancel:hover {
-
-        }
-            margin-top: 0.5rem;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            padding: 1rem;
-            color: #333;
-            background: #e5e7eb;
-        .btn-cancel {
-
-        }
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
-            transform: translateY(-2px);
-        .btn-submit:hover {
-
-        }
-            transition: all 0.3s;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            padding: 1rem;
-            color: #fff;
-            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
-        .btn-submit {
-
-        }
-            margin: 0 auto;
-            max-width: 600px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 2rem;
-            background: #fff;
-        .form-container {
-
-        }
-            min-height: 100px;
-            resize: vertical;
-        textarea {
-
-        }
-            box-shadow: 0 0 0 3px rgba(11, 61, 76, 0.1);
-            border-color: #0B3D4C;
-            outline: none;
-        select:focus {
-        textarea:focus,
-        input:focus,
-
-        }
-            font-size: 1rem;
-            font-family: inherit;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            width: 100%;
-        select {
-        textarea,
-        input,
-
-        }
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            display: block;
-        label {
-
-        }
-            margin-bottom: 1.5rem;
-        .form-group {
-
-        }
-            background: #dc2626;
-        .btn-delete:hover {
-
-        }
-            color: #fff;
-            background: #ef4444;
-        .btn-delete {
-
-        }
-            background: #2563eb;
-        .btn-edit:hover {
-
-        }
-            color: #fff;
-            background: #3b82f6;
-        .btn-edit {
-
-        }
-            transition: all 0.3s;
-            margin-right: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            border: none;
-            padding: 0.5rem 1rem;
-        .btn-delete {
-        .btn-edit,
-
-        }
-            background: #f9f9f9;
-        tr:hover {
-
-        }
-            border-bottom: 1px solid #eee;
-            padding: 1rem;
-        td {
-
-        }
-            font-weight: 600;
-            text-align: left;
-            padding: 1rem;
-            color: #fff;
-            background: #0B3D4C;
-        th {
-
-        }
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            background: #fff;
-            border-collapse: collapse;
-            width: 100%;
-        table {
-
-        }
-            box-shadow: 0 6px 12px rgba(11, 61, 76, 0.3);
-            transform: translateY(-2px);
-        .btn-agregar:hover {
-
-        }
-            transition: all 0.3s;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 6px;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            color: #fff;
-            background: linear-gradient(135deg, #0B3D4C, #2d6a4f);
-        .btn-agregar {
-
-        }
-            }
-                opacity: 1;
-            to {
-
-            }
-                opacity: 0;
-            from {
-        @keyframes fadeIn {
-
-        }
-            display: block;
-        .tab-content.active {
-
-        }
-            animation: fadeIn 0.3s;
-            display: none;
-        .tab-content {
-
-        }
-            border-bottom-color: #0B3D4C;
-            color: #0B3D4C;
-        .tab-btn.active {
-
-        }
-            transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-            color: #666;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 1rem 1.5rem;
-            border: none;
-            background: none;
-        .tab-btn {
-
-        }
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 2rem;
-            gap: 1rem;
-            display: flex;
-        .tabs {
-
-        }
-            padding: 2rem;
-            margin: 0 auto;
-            max-width: 1200px;
-        .container {
-
-        }
-            background: rgba(255, 0, 0, 0.7);
-        .btn-logout:hover {
-
-        }
-            transition: all 0.3s;
-            cursor: pointer;
-            border-radius: 6px;
-            padding: 0.6rem 1.2rem;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.2);
-        .btn-logout {
-
-        }
-            font-weight: 600;
-            font-size: 2rem;
-        header h1 {
-
-        }
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            align-items: center;
-            justify-content: space-between;
-            display: flex;
-            padding: 2rem;
-            color: #fff;
-            background: linear-gradient(135deg, #0B3D4C 0%, #2d6a4f 100%);
-        header {
-
-        }
-            color: #333;
-            background: #f5f5f5;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-        body {
-
-        }
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-        * {
-    <style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <title>Mercy Market - Panel Administrador</title>
-        content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-    <meta http-equiv="Content-Security-Policy"
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-<head>
-
-<html lang="es">
-<!DOCTYPE html>
-
+        // Enter para login
+        document.getElementById('passwordInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificarPassword();
+        });
+    </script>
+</body>
+</html>
