@@ -916,12 +916,14 @@
                 
                 if (error) throw error;
                 
-                const { data: urlData } = _supabase.storage
-                    .from('product-images')
-                    .getPublicUrl(fileName);
-                
-                mostrarAlerta('Imagen cargada correctamente', 'success');
-                return urlData.publicUrl;
+            const { data: urlData } = _supabase.storage
+                .from('product-images')
+                .getPublicUrl(fileName);
+
+            // Log the public URL for debugging
+            console.log('[ADMIN] Image uploaded to Supabase Storage:', urlData.publicUrl);
+            mostrarAlerta('Imagen cargada correctamente', 'success');
+            return urlData.publicUrl;
             } catch (err) {
                 mostrarAlerta('Error al subir imagen: ' + err.message, 'error');
                 return null;
