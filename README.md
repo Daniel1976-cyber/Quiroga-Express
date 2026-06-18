@@ -5,7 +5,7 @@
 ### Acceso
 - **Tienda**: `https://mercymarket.vercel.app/`
 - **Panel Admin**: `https://mercymarket.vercel.app/admin.html`
-- **Contraseña**: `mercy123` (⚠️ cambiar en producción)
+- **Contraseña**: Configurada vía variable de entorno `ADMIN_PASSWORD`. No expongas la contraseña en el código ni en este documento.
 
 ---
 
@@ -40,9 +40,9 @@
 Ve a **Settings → Environment Variables** en Vercel y agrega:
 
 ```env
-SUPABASE_URL=https://nhkpctbmyhjqsfozxdmb.supabase.co
-SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-ADMIN_PASSWORD=tu_contraseña_segura
+SUPABASE_URL=https://<your-supabase-url>.supabase.co
+SUPABASE_KEY=<your-anon-key>
+ADMIN_PASSWORD=<your-secure-admin-password>
 ```
 
 ---
@@ -65,8 +65,8 @@ ADMIN_PASSWORD=tu_contraseña_segura
 
 **b) Cambiar Contraseña Admin**
 ```javascript
-// En admin.html línea ~550
-const ADMIN_PASSWORD = 'tu_contraseña_super_segura_aqui';
+// In admin.html (better: fetch from secure endpoint or env)
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; // use environment variable, not hardcoded
 ```
 
 **c) Usar Variables de Entorno**
