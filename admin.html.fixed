@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-    <title>Mercy Market - Panel Administrador</title>
+    <title>Quiroga Exprees - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -460,7 +460,7 @@
     <!-- Admin Screen -->
     <div id="adminScreen" style="display: none;">
         <header>
-            <h1>🛍️ Mercy Market - Admin</h1>
+            <h1>🛍️ Quiroga Express - Admin</h1>
             <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
         </header>
 
