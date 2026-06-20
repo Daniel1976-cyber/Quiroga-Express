@@ -654,14 +654,9 @@
     </div>
 
     <script>
-        // NOTE: Ensure SUPABASE_URL and SUPABASE_KEY are set to the correct public anon credentials.
-        // In Vercel, configure these as environment variables and inject them into the page if using a build step.
-        // For static hosting, replace the placeholders below with the actual values.
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
-        const ADMIN_PASSWORD = 'admin123'; // Set admin password here
-        // ADMIN_PASSWORD will be loaded dynamically from serverless endpoint if needed
-
+        
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -670,15 +665,24 @@
         let productoEditando = null;
 
         // Verificación de contraseña
-        function verificarPassword() {
+        async function verificarPassword() {
             const password = document.getElementById('passwordInput').value;
-            if (password === ADMIN_PASSWORD) {
-                isAuthenticated = true;
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('adminScreen').style.display = 'block';
-                cargarProductos();
-            } else {
-                mostrarAlerta('Contraseña incorrecta', 'error');
+            try {
+                const response = await fetch('/api/validatePassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                if (response.ok) {
+                    isAuthenticated = true;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminScreen').style.display = 'block';
+                    cargarProductos();
+                } else {
+                    mostrarAlerta('Contraseña incorrecta', 'error');
+                }
+            } catch (err) {
+                mostrarAlerta('Error de conexión al servidor', 'error');
             }
         }
 
