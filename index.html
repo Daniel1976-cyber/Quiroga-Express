@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://nhkpctbmyhjqsfozxdmb.supabase.co https://*.supabase.co;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://nhkpctbmyhjqsfozxdmb.supabase.co https://*.supabase.co;">
     <title>Mercy Market · Tu tienda de confianza</title>
     <link rel="icon" href="data:,">
     <meta name="description"
@@ -573,7 +574,8 @@
 <body>
     <header id="mainHeader"
         style="position:fixed;top:0;left:0;width:100%;height:160px;z-index:1000;background:linear-gradient(135deg,#1a3d2b 0%,#2d6a4f 100%);display:flex;align-items:center;padding:0 2.5rem;gap:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
-                 <img src="logo_compressed.webp" alt="Logo Mercy Market" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(201,169,110,0.5);box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+        <img src="logotipo.png" alt="Logo Quiroga Express"
+            style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(201,169,110,0.5);box-shadow:0 4px 16px rgba(0,0,0,0.25);">
         <div>
             <h1
                 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;letter-spacing:2px;color:#fff;">
@@ -651,7 +653,7 @@
                             class="fab fa-facebook-f"></i></a>
                     <a href="https://wa.me/5353838198" target="_blank" title="WhatsApp"><i
                             class="fab fa-whatsapp"></i></a>
-                    <a href="mailto:mercymarket@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="mailto:quirogaexpress@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div class="footer-col">
@@ -670,14 +672,15 @@
                 <h4>Contacto</h4>
                 <ul>
                     <li><a href="https://wa.me/5353838198"><i class="fas fa-phone"></i> +53 53838198</a></li>
-                    <li><a href="mailto:mercymarket@gmail.com"><i class="fas fa-envelope"></i> mercymarket@gmail.com</a>
+                    <li><a href="mailto:quirogaexpress@gmail.com"><i class="fas fa-envelope"></i>
+                            quirogaexpress@gmail.com</a>
                     </li>
                     <li><span><i class="fas fa-map-marker-alt"></i> San Miguel 90 entre Col&oacute;n y Maceo</span></li>
                     <li><span><i class="fas fa-clock"></i> Lun&ndash;S&aacute;b: 8:30 AM &ndash; 4:00 PM</span></li>
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">&copy; 2025 Mercy Market &mdash; Todos los derechos reservados.</div>
+        <div class="footer-bottom">&copy; 2025 Quiroga Express &mdash; Todos los derechos reservados.</div>
     </footer>
 
     <script>
@@ -1072,25 +1075,25 @@
                     String(a.nombre || '').localeCompare(String(b.nombre || ''))
                 );
 
-                 productosCat.forEach(p => {
-                     const tarjeta = document.createElement('div');
-                     tarjeta.className = 'tarjeta';
+                productosCat.forEach(p => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta';
 
-                     let imgSrc = p.img ? p.img : `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.nombre)}`;
-                     
-                     // Fix for GitHub image requests causing cookie warnings
-                     if (p.img) {
-                         // If it's a GitHub URL for our specific problem files, use local copy instead
-                         if (p.img.includes('githubusercontent.com')) {
-                             if (p.img.includes('cable_1hora.webp')) {
-                                 imgSrc = '/img_mer/cable_1hora.webp';
-                             } else if (p.img.includes('logo_compressed.webp')) {
-                                 imgSrc = '/logo_compressed.webp';
-                             }
-                         }
-                     }
+                    let imgSrc = p.img ? p.img : `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.nombre)}`;
 
-                     tarjeta.innerHTML = `
+                    // Fix for GitHub image requests causing cookie warnings
+                    if (p.img) {
+                        // If it's a GitHub URL for our specific problem files, use local copy instead
+                        if (p.img.includes('githubusercontent.com')) {
+                            if (p.img.includes('cable_1hora.webp')) {
+                                imgSrc = '/img_mer/cable_1hora.webp';
+                            } else if (p.img.includes('logo_compressed.webp')) {
+                                imgSrc = '/logo_compressed.webp';
+                            }
+                        }
+                    }
+
+                    tarjeta.innerHTML = `
                  <img src="${imgSrc}" alt="${p.nombre}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Imagen+No+Disponible';">
                  <div class="info">
                    <h3>${p.nombre}</h3>
@@ -1099,8 +1102,8 @@
                    <button onclick="addCarrito(${p.id})" style="margin-top:.75rem;padding:.5rem 1rem;border:none;border-radius:25px;background:linear-gradient(135deg,#1a3d2b,#2d6a4f);color:#fff;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .3s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(26,61,43,0.35)'" onmouseout="this.style.transform='';this.style.boxShadow=''"><i class='fas fa-cart-plus' style='margin-right:6px;'></i>Agregar</button>
                  </div>
                `;
-                     cont.appendChild(tarjeta);
-                 });
+                    cont.appendChild(tarjeta);
+                });
             });
         }
 

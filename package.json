@@ -1,7 +1,7 @@
 {
-  "name": "mercedes",
+  "name": "Quiroga Express",
   "version": "1.0.0",
-  "description": "Mercy Market - Tienda en linea",
+  "description": "Quiroga Express - Tienda en linea",
   "scripts": {
     "dev": "node server-local.js",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-        <title>Mercy Market - Panel Administrador</title>
+        <title>Quiroga Express - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -630,22 +630,23 @@
             </div>
 
             <div class="form-group">
-    <label for="editDisponible">
-        <input type="checkbox" id="editDisponible" style="width: auto; margin-right: 0.5rem;" />
-        Disponible
-    </label>
-</div>
-<!-- Image upload for edit -->
-<div class="form-group">
-    <label>Imagen del Producto (cambiar)</label>
-    <div id="editDropArea" class="drop-area" style="cursor:pointer; border:2px dashed rgba(0,0,0,0.2); padding:1rem; text-align:center;">
-        <i class="fas fa-cloud-upload-alt fa-2x"></i>
-        <p>Arrastra la imagen aquí o haz clic para seleccionar</p>
-        <img id="editImagePreview" class="img-preview hidden" alt="Vista previa" />
-    </div>
-    <input type="file" id="editImageInput" accept="image/*" style="display:none;" />
-    <input type="hidden" id="editImagen" />
-</div>
+                <label for="editDisponible">
+                    <input type="checkbox" id="editDisponible" style="width: auto; margin-right: 0.5rem;" />
+                    Disponible
+                </label>
+            </div>
+            <!-- Image upload for edit -->
+            <div class="form-group">
+                <label>Imagen del Producto (cambiar)</label>
+                <div id="editDropArea" class="drop-area"
+                    style="cursor:pointer; border:2px dashed rgba(0,0,0,0.2); padding:1rem; text-align:center;">
+                    <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    <p>Arrastra la imagen aquí o haz clic para seleccionar</p>
+                    <img id="editImagePreview" class="img-preview hidden" alt="Vista previa" />
+                </div>
+                <input type="file" id="editImageInput" accept="image/*" style="display:none;" />
+                <input type="hidden" id="editImagen" />
+            </div>
 
             <button class="btn-submit" onclick="guardarEdicion()">Guardar Cambios</button>
             <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
@@ -659,7 +660,7 @@
         const SUPABASE_URL = 'https://nhkpctbmyhjqsfozxdmb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oa3BjdGJteWhqcXNmb3p4ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDAzMzcsImV4cCI6MjA5NDYxNjMzN30.DzV-NsqO-KpqxdUldgj8OX-NPYWnHthPQ4bGi1ghGco';
         const ADMIN_PASSWORD = 'admin123'; // Set admin password here
-// ADMIN_PASSWORD will be loaded dynamically from serverless endpoint if needed
+        // ADMIN_PASSWORD will be loaded dynamically from serverless endpoint if needed
 
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -809,31 +810,31 @@
         }
 
         function editarProducto(id) {
-    productoEditando = productos.find(p => p.id === id);
-    if (!productoEditando) return;
+            productoEditando = productos.find(p => p.id === id);
+            if (!productoEditando) return;
 
-    document.getElementById('editNombre').value = productoEditando.nombre;
-    document.getElementById('editCategoria').value = productoEditando.categoria;
-    document.getElementById('editPrecio').value = productoEditando.precio;
-    document.getElementById('editDisponible').checked = productoEditando.disponible;
+            document.getElementById('editNombre').value = productoEditando.nombre;
+            document.getElementById('editCategoria').value = productoEditando.categoria;
+            document.getElementById('editPrecio').value = productoEditando.precio;
+            document.getElementById('editDisponible').checked = productoEditando.disponible;
 
-    // Set existing image preview if available
-    if (productoEditando.img) {
-        const preview = document.getElementById('editImagePreview');
-        preview.src = productoEditando.img;
-        preview.classList.remove('hidden');
-        document.getElementById('editImagen').value = productoEditando.img;
-    } else {
-        // Ensure hidden state when no image
-        const preview = document.getElementById('editImagePreview');
-        preview.classList.add('hidden');
-        document.getElementById('editImagen').value = '';
-    }
-    // Reset any previous uploaded image URL
-    editUploadedImageUrl = '';
+            // Set existing image preview if available
+            if (productoEditando.img) {
+                const preview = document.getElementById('editImagePreview');
+                preview.src = productoEditando.img;
+                preview.classList.remove('hidden');
+                document.getElementById('editImagen').value = productoEditando.img;
+            } else {
+                // Ensure hidden state when no image
+                const preview = document.getElementById('editImagePreview');
+                preview.classList.add('hidden');
+                document.getElementById('editImagen').value = '';
+            }
+            // Reset any previous uploaded image URL
+            editUploadedImageUrl = '';
 
-    document.getElementById('editModal').classList.add('active');
-}
+            document.getElementById('editModal').classList.add('active');
+        }
 
         async function guardarEdicion() {
             if (!productoEditando) return;
