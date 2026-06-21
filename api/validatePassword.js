@@ -1,26 +1,24 @@
-// Vercel serverless function to validate admin password
-// It expects a POST request with JSON body { "password": "..." }
-// Returns 200 if password matches ADMIN_PASSWORD env var, otherwise 401.
+// /api/validatePassword.js – Vercel Serverless Function
+// Reads ADMIN_PASSWORD from environment variables and validates the password sent in the request body.
+// Returns 200 OK if password matches, otherwise 401 Unauthorized.
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({ message: 'Method Not Allowed' });
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   const { password } = req.body || {};
-  if (typeof password !== 'string') {
-    return res.status(400).json({ message: 'Bad Request: missing password' });
-  }
+  const adminPassword = process.env.ADMIN_PASSWORD; // Vercel env var
 
-  const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) {
-    // For safety, treat missing env as failure
-    return res.status(500).json({ message: 'Server misconfiguration' });
+    console.error('ADMIN_PASSWORD not set in Vercel environment');
+    return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  if (password === adminPassword) {
-    return res.status(200).json({ valid: true });
+  if (password && password === adminPassword) {
+    return res.status(200).json({ success: true });
   }
-  return res.status(401).json({ valid: false, message: 'Invalid password' });
+
+  return res.status(401).json({ error: 'Invalid password' });
 }
