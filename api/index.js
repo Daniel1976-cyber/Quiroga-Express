@@ -60,16 +60,16 @@ fetchProductsFromSupabase().then(data => {
     nombre: p.nombre,
     precio: p.precio,
     categoria: p.categoria,
-    subcategoria: "General",
+    subcategoria: p.subcategoria || "General",
     disponible: p.disponible,
-    img: `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.nombre)}`
+    img: p.img || `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.nombre)}`
   }));
   console.log(`[SERVER] Cargados ${productos.length} productos desde Supabase`);
 }).catch(e => {
   console.error("Error al cargar productos desde Supabase:", e);
-  // Fallback a mercy.json
+  // Fallback a kiro.json
   try {
-    const fileData = fs.readFileSync(path.join(projectRoot, 'mercy.json'), 'utf8');
+    const fileData = fs.readFileSync(path.join(projectRoot, 'kiro.json'), 'utf8');
     const rawProducts = JSON.parse(fileData);
     productos = rawProducts.map((p, index) => ({
       id: index + 1,
@@ -80,9 +80,9 @@ fetchProductsFromSupabase().then(data => {
       disponible: true,
       img: `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.Nombre)}`
     }));
-    console.log(`[SERVER] Fallback: Cargados ${productos.length} productos desde mercy.json`);
+    console.log(`[SERVER] Fallback: Cargados ${productos.length} productos desde kiro.json`);
   } catch (err) {
-    console.error("Error en fallback de mercy.json:", err);
+    console.error("Error en fallback de kiro.json:", err);
   }
 });
 
