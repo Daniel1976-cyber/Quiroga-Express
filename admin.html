@@ -1009,7 +1009,7 @@
                 const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
                 const fileName = `productos/${Date.now()}_${safeName}`;
                 const { data, error } = await _supabase.storage
-                    .from('mercymarket_images')
+                    .from('kiro_images')
                     .upload(fileName, file);
                 if (error) {
                     console.error('[ADMIN] Upload error details:', error);
@@ -1019,7 +1019,7 @@
                 }
                 // Get public URL
                 const { data: urlData, error: urlError } = _supabase.storage
-                    .from('mercymarket_images')
+                    .from('kiro_images')
                     .getPublicUrl(fileName);
                 if (urlError) {
                     console.error('[ADMIN] URL retrieval error:', urlError);
