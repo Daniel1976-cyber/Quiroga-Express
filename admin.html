@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
-        <title>Quiroga Express - Panel Administrador</title>
+        content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;">
+    <title>Quiroga Express - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
@@ -769,7 +769,7 @@
             try {
                 const response = await fetch('/api/admin/products', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'x-admin-password': adminPassword
                     },
@@ -836,16 +836,16 @@
             try {
                 const response = await fetch(`/api/admin/products/${productoEditando.id}`, {
                     method: 'PUT',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'x-admin-password': adminPassword
                     },
-                    body: JSON.stringify({ 
-                        nombre, 
-                        categoria, 
-                        precio, 
-                        disponible, 
-                        img: editUploadedImageUrl || productoEditando.img 
+                    body: JSON.stringify({
+                        nombre,
+                        categoria,
+                        precio,
+                        disponible,
+                        img: editUploadedImageUrl || productoEditando.img
                     })
                 });
 
@@ -1022,9 +1022,9 @@
 
                 const response = await fetch('/api/admin/upload', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
-                        'x-admin-password': adminPassword 
+                        'x-admin-password': adminPassword
                     },
                     body: JSON.stringify(payload)
                 });
