@@ -8,7 +8,6 @@
         content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.supabase.com;"
         <title>Quiroga Express - Panel Administrador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -654,13 +653,8 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://muipdomswcqajrpjtefp.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11aXBkb21zd2NxYWpycGp0ZWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5OTQxNDksImV4cCI6MjA5NzU3MDE0OX0.c--lf28DFfi4VSrRT1nesMvVLy4sHhYzF32O0cbjw9o';
-        
-        const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
         let isAuthenticated = false;
+        let adminPassword = '';
         let productos = [];
         let productoEditando = null;
 
@@ -675,6 +669,7 @@
                 });
                 if (response.ok) {
                     isAuthenticated = true;
+                    adminPassword = password;
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('adminScreen').style.display = 'block';
                     cargarProductos();
@@ -705,32 +700,14 @@
         // Cargar productos
         async function cargarProductos() {
             try {
-                const { data, error } = await _supabase.from('productos').select('*');
-                if (error) throw error;
-                productos = data || [];
+                const response = await fetch('/api/products');
+                if (!response.ok) throw new Error('Error al cargar productos');
+                productos = await response.json();
                 actualizarDashboard();
                 renderizarProductos();
             } catch (err) {
-                console.error('[ADMIN] Error loading products from Supabase:', err);
-                // Attempt direct Supabase REST API as fallback
-                try {
-                    const supabaseResponse = await fetch(`${SUPABASE_URL}/rest/v1/productos?select=*`, {
-                        headers: {
-                            apikey: SUPABASE_KEY,
-                            Authorization: `Bearer ${SUPABASE_KEY}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    if (!supabaseResponse.ok) throw new Error(`HTTP ${supabaseResponse.status}`);
-                    const data = await supabaseResponse.json();
-                    productos = data;
-                    actualizarDashboard();
-                    renderizarProductos();
-                    mostrarAlerta('Cargados productos desde Supabase REST fallback', 'info');
-                } catch (fallbackErr) {
-                    console.error('[ADMIN] Fallback error loading products:', fallbackErr);
-                    mostrarAlerta('Error al cargar productos: ' + err.message, 'error');
-                }
+                console.error('[ADMIN] Error loading products:', err);
+                mostrarAlerta('Error al cargar productos: ' + err.message, 'error');
             }
         }
 
@@ -790,9 +767,13 @@
             }
 
             try {
-                const { data, error } = await _supabase
-                    .from('productos')
-                    .insert([{
+                const response = await fetch('/api/admin/products', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-password': adminPassword
+                    },
+                    body: JSON.stringify({
                         nombre,
                         categoria,
                         subcategoria: subcategoria || 'General',
@@ -800,9 +781,13 @@
                         disponible,
                         img,
                         descripcion
-                    }]);
+                    })
+                });
 
-                if (error) throw error;
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Error desconocido');
+                }
 
                 mostrarAlerta('Producto agregado correctamente', 'success');
                 limpiarFormulario();
@@ -849,12 +834,25 @@
             const disponible = document.getElementById('editDisponible').checked;
 
             try {
-                const { error } = await _supabase
-                    .from('productos')
-                    .update({ nombre, categoria, precio, disponible, img: editUploadedImageUrl || productoEditando.img })
-                    .eq('id', productoEditando.id);
+                const response = await fetch(`/api/admin/products/${productoEditando.id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-password': adminPassword
+                    },
+                    body: JSON.stringify({ 
+                        nombre, 
+                        categoria, 
+                        precio, 
+                        disponible, 
+                        img: editUploadedImageUrl || productoEditando.img 
+                    })
+                });
 
-                if (error) throw error;
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Error desconocido');
+                }
 
                 mostrarAlerta('Producto actualizado correctamente', 'success');
                 cerrarModal();
@@ -872,12 +870,15 @@
 
         async function eliminarProducto(id) {
             try {
-                const { error } = await _supabase
-                    .from('productos')
-                    .delete()
-                    .eq('id', id);
+                const response = await fetch(`/api/admin/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'x-admin-password': adminPassword }
+                });
 
-                if (error) throw error;
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Error desconocido');
+                }
 
                 mostrarAlerta('Producto eliminado correctamente', 'success');
                 cargarProductos();
@@ -1005,33 +1006,41 @@
 
         async function uploadToSupabase(file) {
             try {
-                // Sanitize filename: replace spaces and unsafe characters
-                const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-                const fileName = `productos/${Date.now()}_${safeName}`;
-                const { data, error } = await _supabase.storage
-                    .from('kiro_images')
-                    .upload(fileName, file);
-                if (error) {
-                    console.error('[ADMIN] Upload error details:', error);
-                    // Show more informative alert
-                    mostrarAlerta('Error al subir imagen: ' + (error.message || error), 'error');
-                    return null;
+                // Convert file to Base64
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                const payload = {
+                    imageBase64: base64,
+                    filename: file.name,
+                    mimeType: file.type
+                };
+
+                const response = await fetch('/api/admin/upload', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-password': adminPassword 
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Error desconocido');
                 }
-                // Get public URL
-                const { data: urlData, error: urlError } = _supabase.storage
-                    .from('kiro_images')
-                    .getPublicUrl(fileName);
-                if (urlError) {
-                    console.error('[ADMIN] URL retrieval error:', urlError);
-                    mostrarAlerta('Error al obtener URL de imagen: ' + (urlError.message || urlError), 'error');
-                    return null;
-                }
-                console.log('[ADMIN] Image uploaded to Supabase Storage:', urlData.publicUrl);
+
+                const data = await response.json();
+                console.log('[ADMIN] Image uploaded successfully:', data.url);
                 mostrarAlerta('Imagen cargada correctamente', 'success');
-                return urlData.publicUrl;
+                return data.url;
             } catch (err) {
                 console.error('[ADMIN] Unexpected upload exception:', err);
-                mostrarAlerta('Error inesperado al subir imagen: ' + err.message, 'error');
+                mostrarAlerta('Error al subir imagen: ' + err.message, 'error');
                 return null;
             }
         }
