@@ -1,3 +1,4 @@
+import 'dotenv/config';          // carga .env.local
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -79,6 +80,23 @@ fetchProductsFromSupabase().then(data => {
   } catch (err) {
     console.error("Error en fallback de mercy.json:", err);
   }
+});
+
+// ─── Autenticación del panel admin ─────────────────────────────────────────
+app.post('/api/validatePassword', (req, res) => {
+  const { password } = req.body || {};
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    console.error('[AUTH] ADMIN_PASSWORD no está definida en .env.local');
+    return res.status(500).json({ error: 'Configuración del servidor incorrecta' });
+  }
+
+  if (password && password === adminPassword) {
+    return res.status(200).json({ success: true });
+  }
+
+  return res.status(401).json({ error: 'Contraseña incorrecta' });
 });
 
 // Rutas API
