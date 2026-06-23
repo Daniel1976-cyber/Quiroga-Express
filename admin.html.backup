@@ -911,13 +911,13 @@
             try {
                 const fileName = `productos/${Date.now()}_${file.name}`;
                 const { data, error } = await _supabase.storage
-                    .from('product-images')
+                    .from('kiro-images')
                     .upload(fileName, file);
                 
                 if (error) throw error;
                 
                 const { data: urlData } = _supabase.storage
-                    .from('product-images')
+                    .from('kiro-images')
                     .getPublicUrl(fileName);
                 
                 mostrarAlerta('Imagen cargada correctamente', 'success');
