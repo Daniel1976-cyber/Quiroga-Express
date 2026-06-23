@@ -15,12 +15,12 @@ async function listBuckets() {
 }
 
 async function checkProductImages() {
-  const { data, error } = await supabase.storage.getBucket('product-images');
+  const { data, error } = await supabase.storage.getBucket('kiro_images');
   if (error) {
-    console.error('Error getting bucket product-images:', error);
+    console.error('Error getting bucket kiro_images:', error);
     return;
   }
-  console.log('Bucket product-images:', data);
+  console.log('Bucket kiro_images:', data);
 }
 
 listBuckets().then(checkProductImages);
