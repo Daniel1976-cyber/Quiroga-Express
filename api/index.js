@@ -149,11 +149,11 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
     }
 
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, 'base64');
+    const fileBuffer = Uint8Array.from(Buffer.from(base64Data, 'base64'));
 
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const finalName = `productos/${Date.now()}_${safeName}`;
-    
+
     const { data, error } = await supabase.storage
       .from('kiro_images')
       .upload(finalName, buffer, {
