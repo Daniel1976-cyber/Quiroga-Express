@@ -8,10 +8,10 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function createBucket() {
-  const bucketName = 'mercymarket_images';
-  
+  const bucketName = 'kiro_images';
+
   console.log(`Intentando crear el bucket: ${bucketName}...`);
-  
+
   const { data, error } = await supabase.storage.createBucket(bucketName, {
     public: true,
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif'],
