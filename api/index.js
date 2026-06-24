@@ -140,7 +140,6 @@ app.delete('/api/admin/products/:id', verifyAdmin, async (req, res) => {
   res.json({ success: true });
 });
 
-// Subir imagen (usando Base64 para Vercel)
 app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
   try {
     const { imageBase64, filename, mimeType } = req.body;
@@ -149,14 +148,14 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
     }
 
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-    const fileBuffer = Uint8Array.from(Buffer.from(base64Data, 'base64'));
+    const buffer = Buffer.from(base64Data, 'base64'); // ✅ Cambiado aquí
 
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const finalName = `productos/${Date.now()}_${safeName}`;
 
     const { data, error } = await supabase.storage
       .from('kiro_images')
-      .upload(finalName, buffer, {
+      .upload(finalName, buffer, { // ✅ Ahora "buffer" sí existe
         contentType: mimeType || 'image/jpeg'
       });
 
@@ -168,10 +167,42 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
 
     res.json({ url: urlData.publicUrl });
   } catch (err) {
+    console.error('Upload error:', err);
     res.status(500).json({ error: err.message });
   }
 });
+// Subir imagen (usando Base64 para Vercel)
+//app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
+try {
+  const { imageBase64, filename, mimeType } = req.body;
+  if (!imageBase64 || !filename) {
+    return res.status(400).json({ error: 'No image provided' });
+  }
 
+  const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+  const fileBuffer = Uint8Array.from(Buffer.from(base64Data, 'base64'));
+
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const finalName = `productos/${Date.now()}_${safeName}`;
+
+  const { data, error } = await supabase.storage
+    .from('kiro_images')
+    .upload(finalName, buffer, {
+      contentType: mimeType || 'image/jpeg'
+    });
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  const { data: urlData } = supabase.storage
+    .from('kiro_images')
+    .getPublicUrl(finalName);
+
+  res.json({ url: urlData.publicUrl });
+} catch (err) {
+  res.status(500).json({ error: err.message });
+}
+});
+//
 // Rutas API
 app.get('/api/products', (req, res) => {
   res.json(productos);
