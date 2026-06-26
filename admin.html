@@ -458,6 +458,7 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 
 <body>
@@ -485,9 +486,9 @@
 
             <!-- Tabs -->
             <div class="tabs">
-                <button class="tab-btn active" onclick="cambiarTab('dashboard')">📊 Dashboard</button>
-                <button class="tab-btn" onclick="cambiarTab('productos')">📦 Productos</button>
-                <button class="tab-btn" onclick="cambiarTab('formulario')">➕ Agregar Producto</button>
+                <button class="tab-btn active" onclick="cambiarTab('dashboard', this)">📊 Dashboard</button>
+                <button class="tab-btn" onclick="cambiarTab('productos', this)">📦 Productos</button>
+                <button class="tab-btn" onclick="cambiarTab('formulario', this)">➕ Agregar Producto</button>
             </div>
 
             <!-- Dashboard Tab -->
@@ -654,11 +655,32 @@
 
     <script>
         let isAuthenticated = false;
-        let adminPassword = '';
+        let adminToken = '';
         let productos = [];
         let productoEditando = null;
 
-        // Verificación de contraseña
+        // ─── Helpers ──────────────────────────────────────────────────────────
+        function getToken() {
+            return sessionStorage.getItem('adminToken') || '';
+        }
+
+        function setToken(token) {
+            if (token) {
+                sessionStorage.setItem('adminToken', token);
+            } else {
+                sessionStorage.removeItem('adminToken');
+            }
+            adminToken = token;
+        }
+
+        function authHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'x-admin-token': getToken()
+            };
+        }
+
+        // ─── Login ────────────────────────────────────────────────────────────
         async function verificarPassword() {
             const password = document.getElementById('passwordInput').value;
             try {
@@ -667,21 +689,34 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password })
                 });
-                if (response.ok) {
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    setToken(data.token);
                     isAuthenticated = true;
-                    adminPassword = password;
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('adminScreen').style.display = 'block';
                     cargarProductos();
                 } else {
-                    mostrarAlerta('Contraseña incorrecta', 'error');
+                    mostrarAlerta(data.error || 'Contraseña incorrecta', 'error');
                 }
             } catch (err) {
                 mostrarAlerta('Error de conexión al servidor', 'error');
             }
         }
 
-        function logout() {
+        // ─── Logout ───────────────────────────────────────────────────────────
+        async function logout() {
+            try {
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: { 'x-admin-token': getToken() }
+                });
+            } catch (e) {
+                // Ignorar error de logout
+            }
+            setToken('');
             isAuthenticated = false;
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('adminScreen').style.display = 'none';
@@ -689,15 +724,23 @@
             limpiarFormulario();
         }
 
-        // Cambiar tabs
-        function cambiarTab(tab) {
+        // ─── Cambiar tabs ─────────────────────────────────────────────────────
+        function cambiarTab(tab, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
-            event.target.classList.add('active');
+            if (btn) {
+                btn.classList.add('active');
+            } else {
+                // Si se llamó sin botón (ej: desde "Agregar Nuevo Producto"), activar el tab del formulario
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    if (b.textContent.includes('Agregar') && tab === 'formulario') b.classList.add('active');
+                    if (b.textContent.includes('Productos') && tab === 'productos') b.classList.add('active');
+                });
+            }
         }
 
-        // Cargar productos
+        // ─── Cargar productos ────────────────────────────────────────────────
         async function cargarProductos() {
             try {
                 const response = await fetch('/api/products');
@@ -746,7 +789,7 @@
             });
         }
 
-        // Guardar producto
+        // ─── Guardar producto ────────────────────────────────────────────────
         async function guardarProducto() {
             const nombre = document.getElementById('nombre').value.trim();
             const categoria = document.getElementById('categoria').value;
@@ -769,10 +812,7 @@
             try {
                 const response = await fetch('/api/admin/products', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-admin-password': adminPassword
-                    },
+                    headers: authHeaders(),
                     body: JSON.stringify({
                         nombre,
                         categoria,
@@ -798,6 +838,7 @@
             }
         }
 
+        // ─── Editar producto ─────────────────────────────────────────────────
         function editarProducto(id) {
             productoEditando = productos.find(p => p.id === id);
             if (!productoEditando) return;
@@ -807,19 +848,16 @@
             document.getElementById('editPrecio').value = productoEditando.precio;
             document.getElementById('editDisponible').checked = productoEditando.disponible;
 
-            // Set existing image preview if available
             if (productoEditando.img) {
                 const preview = document.getElementById('editImagePreview');
                 preview.src = productoEditando.img;
                 preview.classList.remove('hidden');
                 document.getElementById('editImagen').value = productoEditando.img;
             } else {
-                // Ensure hidden state when no image
                 const preview = document.getElementById('editImagePreview');
                 preview.classList.add('hidden');
                 document.getElementById('editImagen').value = '';
             }
-            // Reset any previous uploaded image URL
             editUploadedImageUrl = '';
 
             document.getElementById('editModal').classList.add('active');
@@ -836,10 +874,7 @@
             try {
                 const response = await fetch(`/api/admin/products/${productoEditando.id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-admin-password': adminPassword
-                    },
+                    headers: authHeaders(),
                     body: JSON.stringify({
                         nombre,
                         categoria,
@@ -872,7 +907,7 @@
             try {
                 const response = await fetch(`/api/admin/products/${id}`, {
                     method: 'DELETE',
-                    headers: { 'x-admin-password': adminPassword }
+                    headers: { 'x-admin-token': getToken() }
                 });
 
                 if (!response.ok) {
@@ -886,9 +921,6 @@
                 mostrarAlerta('Error: ' + err.message, 'error');
             }
         }
-
-        // Duplicate limpiarFormulario removed – keep the later implementation
-
 
         function cerrarModal() {
             document.getElementById('editModal').classList.remove('active');
@@ -904,7 +936,7 @@
             }, 3000);
         }
 
-        // Drag and drop para imagen
+        // ─── Drag and drop para imagen ───────────────────────────────────────
         const dropArea = document.getElementById('dropArea');
         const imageInput = document.getElementById('imageInput');
         const imagePreview = document.getElementById('imagePreview');
@@ -914,7 +946,7 @@
         dropArea?.addEventListener('click', () => imageInput.click());
 
         imageInput?.addEventListener('change', handleFileSelect);
-        // Edit image input change
+
         const editDropArea = document.getElementById('editDropArea');
         const editImageInput = document.getElementById('editImageInput');
         const editImagePreview = document.getElementById('editImagePreview');
@@ -1006,7 +1038,6 @@
 
         async function uploadToSupabase(file) {
             try {
-                // Convert file to Base64
                 const base64 = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result);
@@ -1022,10 +1053,7 @@
 
                 const response = await fetch('/api/admin/upload', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-admin-password': adminPassword
-                    },
+                    headers: authHeaders(),
                     body: JSON.stringify(payload)
                 });
 
@@ -1045,7 +1073,7 @@
             }
         }
 
-        // Limpiar formulario
+        // ─── Limpiar formulario ──────────────────────────────────────────────
         function limpiarFormulario() {
             document.getElementById('nombre').value = '';
             document.getElementById('categoria').value = '';
@@ -1058,6 +1086,18 @@
             document.getElementById('formTitle').textContent = 'Agregar Nuevo Producto';
             uploadedImageUrl = '';
         }
+
+        // ─── Auto-login si ya hay token ──────────────────────────────────────
+        (function init() {
+            const token = getToken();
+            if (token) {
+                adminToken = token;
+                isAuthenticated = true;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminScreen').style.display = 'block';
+                cargarProductos();
+            }
+        })();
 
         // Enter para login
         document.getElementById('passwordInput')?.addEventListener('keypress', function (e) {

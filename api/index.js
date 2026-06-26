@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
 import fs from 'fs';
+import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -21,6 +22,9 @@ app.use(cors());
 // Aumentar el límite a 10MB para soportar imágenes en Base64
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// ─── Almacén de sesiones activas (en memoria) ─────────────────────────────
+const activeSessions = new Set();
 
 // Cargar productos desde Supabase
 let productos = [];
@@ -97,16 +101,28 @@ app.post('/api/validatePassword', (req, res) => {
   }
 
   if (password && password === adminPassword) {
-    return res.status(200).json({ success: true });
+    const token = crypto.randomUUID();
+    activeSessions.add(token);
+    return res.status(200).json({ success: true, token });
   }
 
   return res.status(401).json({ error: 'Contraseña incorrecta' });
 });
 
+// Logout: invalida el token en el servidor
+app.post('/api/logout', (req, res) => {
+  const token = req.headers['x-admin-token'];
+  if (token) {
+    activeSessions.delete(token);
+  }
+  return res.status(200).json({ success: true });
+});
+
+// Middleware: verifica el TOKEN, no la contraseña
 const verifyAdmin = (req, res, next) => {
-  const password = req.headers['x-admin-password'];
-  if (!password || password !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'No autorizado' });
+  const token = req.headers['x-admin-token'];
+  if (!token || !activeSessions.has(token)) {
+    return res.status(401).json({ error: 'No autorizado. Inicia sesión de nuevo.' });
   }
   next();
 };
@@ -140,6 +156,7 @@ app.delete('/api/admin/products/:id', verifyAdmin, async (req, res) => {
   res.json({ success: true });
 });
 
+// Subir imagen (usando Base64 para Vercel)
 app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
   try {
     const { imageBase64, filename, mimeType } = req.body;
@@ -148,14 +165,14 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
     }
 
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, 'base64'); // ✅ Cambiado aquí
+    const buffer = Buffer.from(base64Data, 'base64');
 
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const finalName = `productos/${Date.now()}_${safeName}`;
 
     const { data, error } = await supabase.storage
       .from('kiro_images')
-      .upload(finalName, buffer, { // ✅ Ahora "buffer" sí existe
+      .upload(finalName, buffer, {
         contentType: mimeType || 'image/jpeg'
       });
 
@@ -171,38 +188,7 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// Subir imagen (usando Base64 para Vercel)
-//app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
-try {
-  const { imageBase64, filename, mimeType } = req.body;
-  if (!imageBase64 || !filename) {
-    return res.status(400).json({ error: 'No image provided' });
-  }
 
-  const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
-  const fileBuffer = Uint8Array.from(Buffer.from(base64Data, 'base64'));
-
-  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const finalName = `productos/${Date.now()}_${safeName}`;
-
-  const { data, error } = await supabase.storage
-    .from('kiro_images')
-    .upload(finalName, buffer, {
-      contentType: mimeType || 'image/jpeg'
-    });
-
-  if (error) return res.status(500).json({ error: error.message });
-
-  const { data: urlData } = supabase.storage
-    .from('kiro_images')
-    .getPublicUrl(finalName);
-
-  res.json({ url: urlData.publicUrl });
-} catch (err) {
-  res.status(500).json({ error: err.message });
-}
-});
-//
 // Rutas API
 app.get('/api/products', (req, res) => {
   res.json(productos);
