@@ -9,8 +9,6 @@ import fs from 'fs';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.join(__dirname, '..');
@@ -19,9 +17,17 @@ const app = express();
 
 // Middleware
 app.use(cors());
-// Aumentar el límite a 10MB para soportar imágenes en Base64
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// ─── Supabase client ──────────────────────────────────────────────────────
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://muipdomswcqajrpjtefp.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11aXBkb21zd2NxYWpycGp0ZWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5OTQxNDksImV4cCI6MjA5NzU3MDE0OX0.c--lf28DFfi4VSrRT1nesMvVLy4sHhYzF32O0cbjw9o';
+
+console.log('[SERVER] Supabase URL:', SUPABASE_URL);
+console.log('[SERVER] Supabase Key presente:', SUPABASE_KEY ? 'Sí (' + SUPABASE_KEY.slice(0, 20) + '...)' : 'NO - Key faltante');
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── Almacén de sesiones activas (en memoria) ─────────────────────────────
 const activeSessions = new Set();
@@ -36,8 +42,8 @@ function fetchProductsFromSupabase() {
       path: '/rest/v1/productos?select=*',
       method: 'GET',
       headers: {
-        'apikey': process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11aXBkb21zd2NxYWpycGp0ZWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5OTQxNDksImV4cCI6MjA5NzU3MDE0OX0.c--lf28DFfi4VSrRT1nesMvVLy4sHhYzF32O0cbjw9o',
-        'Authorization': `Bearer ${process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11aXBkb21zd2NxYWpycGp0ZWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5OTQxNDksImV4cCI6MjA5NzU3MDE0OX0.c--lf28DFfi4VSrRT1nesMvVLy4sHhYzF32O0cbjw9o'}`
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
       }
     };
 
@@ -164,11 +170,19 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
       return res.status(400).json({ error: 'No image provided' });
     }
 
+    console.log('[UPLOAD] Recibido upload para:', filename);
+    console.log('[UPLOAD] Base64 length:', imageBase64.length);
+
+    // ✅ Regex corregida para JavaScript (no Python)
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+    console.log('[UPLOAD] Base64 limpio length:', base64Data.length);
+
     const buffer = Buffer.from(base64Data, 'base64');
+    console.log('[UPLOAD] Buffer size:', buffer.length, 'bytes');
 
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
     const finalName = `productos/${Date.now()}_${safeName}`;
+    console.log('[UPLOAD] Subiendo a bucket: kiro_images, path:', finalName);
 
     const { data, error } = await supabase.storage
       .from('kiro_images')
@@ -176,15 +190,21 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
         contentType: mimeType || 'image/jpeg'
       });
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) {
+      console.error('[UPLOAD] Error de Supabase:', error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    console.log('[UPLOAD] Upload exitoso:', data);
 
     const { data: urlData } = supabase.storage
       .from('kiro_images')
       .getPublicUrl(finalName);
 
+    console.log('[UPLOAD] URL pública:', urlData.publicUrl);
     res.json({ url: urlData.publicUrl });
   } catch (err) {
-    console.error('Upload error:', err);
+    console.error('[UPLOAD] Error inesperado:', err);
     res.status(500).json({ error: err.message });
   }
 });
