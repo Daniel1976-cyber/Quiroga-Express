@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
 
 async function createBucket() {
   const bucketName = 'kiro_images';

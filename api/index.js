@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env.local', override: true });
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -25,9 +26,21 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://muipdomswcqajrpjtefp.s
 const SUPABASE_KEY = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11aXBkb21zd2NxYWpycGp0ZWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5OTQxNDksImV4cCI6MjA5NzU3MDE0OX0.c--lf28DFfi4VSrRT1nesMvVLy4sHhYzF32O0cbjw9o';
 
 console.log('[SERVER] Supabase URL:', SUPABASE_URL);
-console.log('[SERVER] Supabase Key presente:', SUPABASE_KEY ? 'Sí (' + SUPABASE_KEY.slice(0, 20) + '...)' : 'NO - Key faltante');
+console.log('[SERVER] Supabase Key length:', SUPABASE_KEY.length);
+console.log('[DEBUG] Service role key length:', process.env.SUPABASE_SERVICE_ROLE?.length);
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseService = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
+
+// Ensure the storage bucket exists (create if missing)
+;(async () => {
+  const { data, error } = await supabaseService.storage.createBucket('kiro_images', { public: true });
+  if (error && error.status !== 409) {
+    console.error('[BUCKET] Error creating bucket:', error);
+  } else {
+    console.log('[BUCKET] kiro_images ready');
+  }
+})();
 
 // ─── Almacén de sesiones activas (en memoria) ─────────────────────────────
 const activeSessions = new Set();
@@ -184,7 +197,7 @@ app.post('/api/admin/upload', verifyAdmin, async (req, res) => {
     const finalName = `productos/${Date.now()}_${safeName}`;
     console.log('[UPLOAD] Subiendo a bucket: kiro_images, path:', finalName);
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabaseService.storage
       .from('kiro_images')
       .upload(finalName, buffer, {
         contentType: mimeType || 'image/jpeg'
