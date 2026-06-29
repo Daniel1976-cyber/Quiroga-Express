@@ -32,16 +32,6 @@ console.log('[DEBUG] Service role key length:', process.env.SUPABASE_SERVICE_ROL
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const supabaseService = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
-// Ensure the storage bucket exists (create if missing)
-;(async () => {
-  const { data, error } = await supabaseService.storage.createBucket('kiro_images', { public: true });
-  if (error && error.status !== 409) {
-    console.error('[BUCKET] Error creating bucket:', error);
-  } else {
-    console.log('[BUCKET] kiro_images ready');
-  }
-})();
-
 // ─── Almacén de sesiones activas (en memoria) ─────────────────────────────
 const activeSessions = new Set();
 
