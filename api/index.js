@@ -129,11 +129,34 @@ app.post('/api/logout', (req, res) => {
 
 // Middleware: verifica el TOKEN, no la contraseña
 const verifyAdmin = (req, res, next) => {
-  const token = req.headers['x-admin-token'];
-  if (!token || !activeSessions.has(token)) {
-    return res.status(401).json({ error: 'No autorizado. Inicia sesión de nuevo.' });
+  try {
+    const token = req.headers['x-admin-token'];
+
+    // 1. validar que exista token
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    // 2. comparar contra variable segura del entorno
+    const validToken = process.env.ADMIN_TOKEN;
+
+    if (!validToken) {
+      console.error('[AUTH] ADMIN_TOKEN no está configurado en el servidor');
+      return res.status(500).json({ error: 'Server misconfigured' });
+    }
+
+    // 3. comparación estricta
+    if (token !== validToken) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // 4. acceso permitido
+    next();
+
+  } catch (err) {
+    console.error('[AUTH] verifyAdmin error:', err);
+    return res.status(500).json({ error: 'Auth error' });
   }
-  next();
 };
 
 // ─── Endpoints Admin Protegidos ────────────────────────────────────────────
