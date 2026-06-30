@@ -102,28 +102,31 @@ fetchProductsFromSupabase().then(data => {
 // ─── Autenticación del panel admin ─────────────────────────────────────────
 app.post('/api/validatePassword', (req, res) => {
   const { password } = req.body || {};
+
   const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminToken = process.env.ADMIN_TOKEN;
 
-  if (!adminPassword) {
-    console.error('[AUTH] ADMIN_PASSWORD no está definida en el entorno');
-    return res.status(500).json({ error: 'Configuración del servidor incorrecta' });
+  if (!adminPassword || !adminToken) {
+    console.error('[AUTH] Faltan variables de entorno');
+    return res.status(500).json({
+      error: 'Configuración del servidor incorrecta'
+    });
   }
 
-  if (password && password === adminPassword) {
-    const token = crypto.randomUUID();
-    activeSessions.add(token);
-    return res.status(200).json({ success: true, token });
+  if (password !== adminPassword) {
+    return res.status(401).json({
+      error: 'Contraseña incorrecta'
+    });
   }
 
-  return res.status(401).json({ error: 'Contraseña incorrecta' });
+  return res.status(200).json({
+    success: true,
+    token: adminToken
+  });
 });
 
 // Logout: invalida el token en el servidor
 app.post('/api/logout', (req, res) => {
-  const token = req.headers['x-admin-token'];
-  if (token) {
-    activeSessions.delete(token);
-  }
   return res.status(200).json({ success: true });
 });
 
